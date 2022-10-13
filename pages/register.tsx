@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
 import { fetchRegister } from "../store/reducers/RegisterSlice";
+import styled from "styled-components";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -28,11 +29,17 @@ const Login = () => {
   };
   console.log(message, error);
   return (
-    <div>
-      <h1>Register Page</h1>
+    <StyledRegister>
+      <p className="subtitle">Auth</p>
+      <h1 className="title">Register Page</h1>
+      <label htmlFor="username" className="label">
+        Username
+      </label>
       <input
+        name="username"
         type="text"
         placeholder="Username"
+        className="input"
         onChange={(e) =>
           setFormData({
             ...formData,
@@ -40,9 +47,14 @@ const Login = () => {
           })
         }
       />
+      <label htmlFor="password" className="label">
+        Password
+      </label>
       <input
+        name="password"
         type="text"
         placeholder="password"
+        className="input"
         onChange={(e) =>
           setFormData({
             ...formData,
@@ -50,11 +62,32 @@ const Login = () => {
           })
         }
       />
-      <button onClick={submitHandler}>Submit</button>
+      <button onClick={submitHandler} className="btn">
+        Register
+      </button>
       {message && <p>{message}</p>}
       {error && <p>{error}</p>}
-    </div>
+    </StyledRegister>
   );
 };
+
+const StyledRegister = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  margin-left: 280px;
+  padding-left: 100px;
+  padding-top: 50px;
+  .title {
+    margin-bottom: 35px;
+  }
+  .btn {
+    color: var(--dark);
+    background-color: white;
+    &:hover {
+      background-color: #a0a0a0;
+    }
+  }
+`;
 
 export default Login;

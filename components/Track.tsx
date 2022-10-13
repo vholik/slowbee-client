@@ -66,6 +66,7 @@ const StyledTrack = styled.div`
   padding: 15px 0;
   border-bottom: 1px solid var(--grey-10);
   .play-button {
+    cursor: pointer;
   }
   .cover-art {
     border-radius: 8px;
@@ -76,7 +77,6 @@ const StyledTrack = styled.div`
     gap: 15px;
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 `;
 

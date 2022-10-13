@@ -44,6 +44,29 @@ body {
   font-weight: 500;
   width: fit-content;
 }
+
+.label {
+  font-size: 18px;
+}
+
+.input {
+  margin-top: 15px;
+  margin-bottom: 35px;
+  font-family: var(--font);
+  font-size: 18px;
+  padding: 20px 18px;
+  outline: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  border: 1px solid var(--grey-30);
+}
+
+.input::placeholder {
+  color: var(--grey-30);
+}
+
 .btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
