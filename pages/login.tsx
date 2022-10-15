@@ -6,7 +6,6 @@ import styled from "styled-components";
 
 const Login = () => {
   const dispatch = useAppDispatch();
-
   const { payload, error, isLoading } = useAppSelector(
     (state) => state.loginReducer
   );
@@ -14,6 +13,7 @@ const Login = () => {
     username: "",
     password: "",
   });
+
 
   const submitHandler = () => {
     dispatch(fetchLogin(formData))
@@ -23,6 +23,7 @@ const Login = () => {
   };
   return (
     <StyledLogin>
+
       <p className="subtitle">Auth</p>
       <h1 className="title">Login Page</h1>
       <label htmlFor="username" className="label">

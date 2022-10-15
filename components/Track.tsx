@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import playIcon from "../public/images/tracks/play-icon.svg";
+import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
+import { addActiveTrack } from "../store/reducers/PlayerSlice";
+import pauseIcon from "../public/images/tracks/pause-icon.svg";
+import { pauseTrack } from "../store/reducers/PlayerSlice";
 
 interface TrackProps {
   name: string;
@@ -9,6 +13,7 @@ interface TrackProps {
   audio: string;
   cover: string;
   length: number;
+  id: string;
 }
 
 const Track: React.FC<TrackProps> = ({
@@ -17,26 +22,70 @@ const Track: React.FC<TrackProps> = ({
   cover,
   length,
   name,
+  id,
 }) => {
-  function sToTime(t: number) {
-    return (
-      padZero(parseInt(String((t / 60) % 60))) +
-      ":" +
-      padZero(parseInt(String(t % 60)))
+  const dispatch = useAppDispatch();
+  const { active, pause } = useAppSelector((state) => state.playerReducer);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const addActiveSong = () => {
+    if (active) {
+      if (active._id === id) {
+        setIsPlaying(true);
+      } else {
+        setIsPlaying(false);
+      }
+    }
+
+    dispatch(
+      addActiveTrack({
+        artist,
+        audio,
+        cover,
+        length,
+        name,
+        _id: id,
+      })
     );
-  }
-  function padZero(v: number) {
-    return v < 10 ? "0" + v : v;
-  }
+  };
+  const pauseSong = () => {
+    console.log(isPlaying);
+    dispatch(pauseTrack(true));
+    setIsPlaying(false);
+  };
+  useEffect(() => {
+    if (active) {
+      if (active._id === id) {
+        setIsPlaying(true);
+      } else {
+        setIsPlaying(false);
+      }
+    }
+    if (pause) {
+      setIsPlaying(false);
+    }
+  }, [active, pause]);
   return (
     <StyledTrack>
-      <Image
-        src={playIcon}
-        alt="Play"
-        className="play-button"
-        height={20}
-        width={20}
-      />
+      {isPlaying ? (
+        <Image
+          src={pauseIcon}
+          alt="Play"
+          className="play-button"
+          height={20}
+          width={20}
+          onClick={() => pauseSong()}
+        />
+      ) : (
+        <Image
+          src={playIcon}
+          alt="Play"
+          className="play-button"
+          height={20}
+          width={20}
+          onClick={() => addActiveSong()}
+        />
+      )}
       <div className="track-body">
         <Image
           src={cover}
@@ -49,9 +98,6 @@ const Track: React.FC<TrackProps> = ({
         <p>{name}</p>
       </div>
       <p>{artist}</p>
-      {/* <audio autoPlay={false} controls={true}>
-        <source type="audio/mp3" src={audio} />
-      </audio> */}
       <p>{sToTime(length)}</p>
     </StyledTrack>
   );
@@ -79,5 +125,16 @@ const StyledTrack = styled.div`
     align-items: center;
   }
 `;
+
+export function sToTime(t: number) {
+  function padZero(v: number) {
+    return v < 10 ? "0" + v : v;
+  }
+  return (
+    padZero(parseInt(String((t / 60) % 60))) +
+    ":" +
+    padZero(parseInt(String(t % 60)))
+  );
+}
 
 export default Track;

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { fetchTracks } from "../../store/reducers/TrackSlice";
+import { fetchTracks } from "../../store/reducers/TracksSlice";
 import { useAppSelector } from "../../store/hooks/redux";
 import { useAppDispatch } from "../../store/hooks/redux";
 import Track from "../../components/Track";
@@ -14,7 +14,7 @@ const Tracks = () => {
     dispatch(fetchTracks())
       .unwrap()
       .then((tracks) => {
-        console.log(tracks);
+        // console.log(tracks);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -38,6 +38,7 @@ const Tracks = () => {
             audio={track.audio}
             cover={track.cover}
             length={track.length}
+            id={track._id}
           />
         ))}
       </div>

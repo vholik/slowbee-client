@@ -15,6 +15,10 @@ body {
   --bold: 700;
 }
 
+.none {
+  display: none !important;
+}
+
 .subtitle {
   font-size: 21px;
   color: var(--grey-60);

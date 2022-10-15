@@ -13,7 +13,7 @@ const Create = () => {
   const { track, error, isLoading } = useAppSelector(
     (state) => state.uploadReducer
   );
-  const [isError, setIsError] = useState("");
+  const [isError, setIsError] = useState<any>("");
   const [isPercentageShow, SetIsPercentageShow] = useState(false);
   const audioRef = useRef(null);
   const coverRef = useRef<null | HTMLInputElement>(null);
@@ -30,7 +30,6 @@ const Create = () => {
     cover: "",
     length: 0,
   });
-
   const uploadHandler = () => {
     setIsError("");
     try {
@@ -50,8 +49,8 @@ const Create = () => {
         throw new Error("Format of the audio should be mp3");
       }
       if (
-        coverFormat !== "jpg" ??
-        coverFormat !== "png" ??
+        coverFormat !== "jpg" &&
+        coverFormat !== "png" &&
         coverFormat !== "jpeg"
       ) {
         throw new Error("Format of the image should be jpeg, png or jpg");
@@ -68,7 +67,7 @@ const Create = () => {
         })
         .catch((err) => setIsError(err));
     } catch (error: any) {
-      setIsError(error.message);
+      setIsError(error);
     }
   };
 
@@ -219,7 +218,7 @@ const Create = () => {
             <Image src={arrowRight} alt="Next" />
           </button>
         )}
-        {isError && <p className="error">{isError}</p>}
+        {isError && <p className="error">{isError.message}</p>}
       </Step>
     </StyledCreate>
   );
