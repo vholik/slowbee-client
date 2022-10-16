@@ -49,7 +49,6 @@ const Track: React.FC<TrackProps> = ({
     );
   };
   const pauseSong = () => {
-    console.log(isPlaying);
     dispatch(pauseTrack(true));
     setIsPlaying(false);
   };
@@ -111,13 +110,23 @@ const StyledTrack = styled.div`
   font-size: 16px;
   padding: 15px 0;
   border-bottom: 1px solid var(--grey-10);
+
+  p {
+    width: fit-content;
+  }
+
   .play-button {
+    height: 40px;
+    width: 40px;
     cursor: pointer;
   }
   .cover-art {
+    height: 40px;
     border-radius: 8px;
   }
   .track-body {
+    width: 60%;
+    height: 40px;
     font-size: 18px;
     color: white;
     gap: 15px;
@@ -134,6 +143,20 @@ export function sToTime(t: number) {
     padZero(parseInt(String((t / 60) % 60))) +
     ":" +
     padZero(parseInt(String(t % 60)))
+  );
+}
+
+export function LoadingTrack() {
+  return (
+    <StyledTrack>
+      <p></p>
+
+      <div className="track-body gradient">
+        <p>Track name</p>
+      </div>
+      <p className="gradient">Track artist</p>
+      <p className="gradient">0:00</p>
+    </StyledTrack>
   );
 }
 

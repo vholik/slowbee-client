@@ -1,20 +1,24 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import trackReducer from "./reducers/TracksSlice";
-import playlistReducer from "./reducers/PlaylistsSlice";
+import playlistsReducer from "./reducers/PlaylistsSlice";
 import loginReducer from "./reducers/LoginSlice";
 import registerReducer from "./reducers/RegisterSlice";
 import uploadReducer from "./reducers/UploadSlice";
 import playerReducer from "./reducers/PlayerSlice";
 import createPlaylistReducer from "./reducers/CreatePlaylistSlice";
+import playlistReducer from "./reducers/PlaylistSlice";
+import addToPlaylistReducer from "./reducers/AddToPlaylistSlice";
 
 const rootReducer = combineReducers({
   trackReducer,
-  playlistReducer,
+  playlistsReducer,
   loginReducer,
   registerReducer,
   uploadReducer,
   playerReducer,
   createPlaylistReducer,
+  playlistReducer,
+  addToPlaylistReducer,
 });
 
 export const setupStore = () => {

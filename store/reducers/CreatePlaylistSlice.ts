@@ -22,7 +22,7 @@ export const createPlaylist = createAsyncThunk(
   "playlist",
   async (formData: IFormData, thunkAPI) => {
     try {
-      const response = await instance.post<IFormData>("/playlists", formData);
+      const response = await instance.post<string>("/playlists", formData);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Can not create playlist");

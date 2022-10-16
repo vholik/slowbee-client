@@ -4,7 +4,7 @@ import axios from "axios";
 import instance from "../../axios";
 
 interface PlaylistState {
-  playlists: IPlaylist[];
+  playlists: string[];
   isLoading: boolean;
   error: string;
 }
@@ -19,7 +19,7 @@ export const fetchPlaylists = createAsyncThunk(
   "playlist/fetchAll",
   async (_, thunkAPI) => {
     try {
-      const response = await instance.get<IPlaylist[]>("/playlists");
+      const response = await instance.get<string[]>("/playlists");
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Can not load tracks");
@@ -34,7 +34,7 @@ export const PlaylistsSlice = createSlice({
   extraReducers: {
     [fetchPlaylists.fulfilled.type]: (
       state,
-      action: PayloadAction<IPlaylist[]>
+      action: PayloadAction<string[]>
     ) => {
       state.isLoading = false;
       state.error = "";

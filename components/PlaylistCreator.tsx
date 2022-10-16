@@ -4,6 +4,7 @@ import { useAppDispatch } from "../store/hooks/redux";
 import styled from "styled-components";
 import { firebaseHandler } from "../firebase";
 import { createPlaylist } from "../store/reducers/CreatePlaylistSlice";
+import { fetchPlaylists } from "../store/reducers/PlaylistsSlice";
 
 interface PlaylistCreatorProps {
   setIsShowCreator: any;
@@ -52,9 +53,11 @@ const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
     dispatch(createPlaylist(formData))
       .unwrap()
       .then((res) => {
-        alert("Created succesfully"), console.log(res);
+        alert("Created succesfully"),
+          console.log(res),
+          dispatch(fetchPlaylists());
       })
-      .catch((err) => console.log(err));
+      .catch((err: any) => console.log(err));
   };
 
   return (
@@ -79,7 +82,7 @@ const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
             {coverName ? (
               <p className="file-name">{coverName}</p>
             ) : (
-              <p className="file-name">Please upload your audio</p>
+              <p className="file-name">Please upload cover</p>
             )}
             <input
               type="file"
@@ -120,9 +123,12 @@ const StyledCreator = styled.div`
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(2.5px);
+  .title {
+    margin-top: 0;
+  }
   .box {
     z-index: 6;
-    padding: 35px;
+    padding: 40px 35px;
     border-radius: 35px;
     background-color: var(--dark);
     display: flex;

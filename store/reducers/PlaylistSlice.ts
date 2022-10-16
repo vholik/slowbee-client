@@ -21,7 +21,7 @@ const initialState: PlaylistState = {
   error: "",
 };
 
-export const fetchPlaylists = createAsyncThunk(
+export const fetchPlaylist = createAsyncThunk(
   "playlist/getOne",
   async (id: string, thunkAPI) => {
     try {
@@ -33,12 +33,12 @@ export const fetchPlaylists = createAsyncThunk(
   }
 );
 
-export const PlaylistsSlice = createSlice({
+export const PlaylistSlice = createSlice({
   name: "playlist",
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchPlaylists.fulfilled.type]: (
+    [fetchPlaylist.fulfilled.type]: (
       state,
       action: PayloadAction<IPlaylist>
     ) => {
@@ -46,14 +46,14 @@ export const PlaylistsSlice = createSlice({
       state.error = "";
       state.playlist = action.payload;
     },
-    [fetchPlaylists.pending.type]: (state) => {
+    [fetchPlaylist.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [fetchPlaylists.rejected.type]: (state, action: PayloadAction<string>) => {
+    [fetchPlaylist.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
     },
   },
 });
 
-export default PlaylistsSlice.reducer;
+export default PlaylistSlice.reducer;

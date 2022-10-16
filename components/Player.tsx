@@ -12,6 +12,7 @@ import {
   setCurrentTime,
 } from "../store/reducers/PlayerSlice";
 import { sToTime } from "./Track";
+import { toggleModal } from "../store/reducers/AddToPlaylistSlice";
 
 export default function Player() {
   const dispatch = useAppDispatch();
@@ -45,6 +46,10 @@ export default function Player() {
   const changeCurrentTime = () => {
     dispatch(setCurrentTime(audioPlayer.current!.currentTime));
   };
+  const showModal = () => {
+    dispatch(toggleModal());
+  };
+
   return (
     <div className={active ? "" : "none"}>
       <StyledPlayer>
@@ -105,6 +110,7 @@ export default function Player() {
             <p className="range-value">{sToTime(length)}</p>
           </div>
         </div>
+        <p onClick={showModal}>Add to playlist</p>
         <div className="volume">
           <Image
             alt="Volum"
@@ -140,6 +146,7 @@ const StyledPlayer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 15;
   .general-info {
     display: flex;
     align-items: center;

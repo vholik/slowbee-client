@@ -1,15 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchTracks } from "../../store/reducers/TracksSlice";
 import { useAppSelector } from "../../store/hooks/redux";
 import { useAppDispatch } from "../../store/hooks/redux";
 import Track from "../../components/Track";
 import styled from "styled-components";
+import { LoadingTrack } from "../../components/Track";
+import AddToPlaylist from "../../components/AddToPlaylist";
+import { toggleModal } from "../../store/reducers/AddToPlaylistSlice";
 
 const Tracks = () => {
   const dispatch = useAppDispatch();
   const { tracks, error, isLoading } = useAppSelector(
     (state) => state.trackReducer
   );
+  const { isShowModal } = useAppSelector((state) => state.addToPlaylistReducer);
   useEffect(() => {
     dispatch(fetchTracks())
       .unwrap()
@@ -21,36 +25,55 @@ const Tracks = () => {
 
   return (
     <StyledTracks>
-      <h3 className="tracks-subtitle">All</h3>
-      <h1 className="tracks-title">Songs from all time</h1>
-      <div className="markups">
-        <p className="index markups-item"></p>
-        <p className="name markups-item">Name</p>
-        <p className="artist markups-item">Artist</p>
-        <p className="time markups-item">Time</p>
-      </div>
-      <div className="tracks-wrapper">
-        {tracks.map((track) => (
-          <Track
-            key={track._id}
-            name={track.name}
-            artist={track.artist}
-            audio={track.audio}
-            cover={track.cover}
-            length={track.length}
-            id={track._id}
-          />
-        ))}
+      {isShowModal && <AddToPlaylist />}
+      <div className="inner">
+        <h3 className="tracks-subtitle">All</h3>
+        <h1 className="tracks-title">Songs from all time</h1>
+        <div className="markups">
+          <p className="index markups-item"></p>
+          <p className="name markups-item">Name</p>
+          <p className="artist markups-item">Artist</p>
+          <p className="time markups-item">Time</p>
+        </div>
+        {isLoading ? (
+          <div className="tracks-wrapper">
+            <LoadingTrack />
+            <LoadingTrack />
+            <LoadingTrack />
+            <LoadingTrack />
+            <LoadingTrack />
+            <LoadingTrack />
+            <LoadingTrack />
+            <LoadingTrack />
+            <LoadingTrack />
+          </div>
+        ) : (
+          <div className="tracks-wrapper">
+            {tracks.map((track) => (
+              <Track
+                key={track._id}
+                name={track.name}
+                artist={track.artist}
+                audio={track.audio}
+                cover={track.cover}
+                length={track.length}
+                id={track._id}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </StyledTracks>
   );
 };
 
-const StyledTracks = styled.div`
-  margin-left: 280px;
-  padding-left: 100px;
-  padding-top: 50px;
-  max-width: 1000px;
+export const StyledTracks = styled.div`
+  .inner {
+    margin-left: 280px;
+    padding-left: 100px;
+    padding-top: 50px;
+    max-width: 1000px;
+  }
   .markups {
     margin-top: 25px;
     display: grid;
