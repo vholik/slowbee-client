@@ -4,16 +4,23 @@ import chevronDown from "../public/images/header/chevron-down.svg";
 import Image from "next/image";
 import { KeyboardEventHandler, useState } from "react";
 import Router from "next/router";
+import { searchTracks } from "../store/reducers/track/SearchSlice";
+import { useAppDispatch } from "../store/hooks/redux";
 
 interface KeyboardEvent {
   key: string;
 }
 
 export default function Header() {
+  const dispatch = useAppDispatch();
+
   const [keywords, setKeywords] = useState("");
+
   const searchHandler = () => {
     if (keywords.length > 3) {
-      Router.push(`/search/${keywords}`);
+      dispatch(searchTracks(keywords.replace(/[^a-zA-Z0-9]/g, "")));
+      console.log(keywords.replace(/[^a-zA-Z0-9]/g, ""));
+      Router.push(`/search/${keywords.replace(/[^a-zA-Z0-9]/g, " ")}`);
     }
   };
 
@@ -26,7 +33,6 @@ export default function Header() {
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeywords(e.target.value);
-    console.log(keywords);
   };
   return (
     <StyledHeader>
