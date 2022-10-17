@@ -3,9 +3,9 @@ import Image from "next/image";
 import styled from "styled-components";
 import playIcon from "../public/images/tracks/play-icon.svg";
 import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
-import { addActiveTrack } from "../store/reducers/PlayerSlice";
+import { addActiveTrack } from "../store/reducers/player/PlayerSlice";
 import pauseIcon from "../public/images/tracks/pause-icon.svg";
-import { pauseTrack } from "../store/reducers/PlayerSlice";
+import { pauseTrack } from "../store/reducers/player/PlayerSlice";
 
 interface TrackProps {
   name: string;

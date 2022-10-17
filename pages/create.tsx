@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import Step from "../components/Step";
 import { IUploadFormData } from "../types/uploadFormData";
 import { firebaseHandler } from "../firebase";
-import { uploadTrack } from "../store/reducers/UploadSlice";
+import { uploadTrack } from "../store/reducers/track/UploadSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
 import styled from "styled-components";
 import arrowRight from "../public/images/upload/dark-arrow-right.svg";

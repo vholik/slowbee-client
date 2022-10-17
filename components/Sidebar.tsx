@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../store/hooks/redux";
-import { refreshToken } from "../store/reducers/RefreshSlice";
+import { refreshToken } from "../store/reducers/auth/RefreshSlice";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Track, { LoadingTrack } from "../components/Track";
 import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
-import { fetchFavorites } from "../store/reducers/GetFavoritesSlice";
+import { fetchFavorites } from "../store/reducers/favorite/GetFavoritesSlice";
 
 export default function Favorites() {
   const dispatch = useAppDispatch();

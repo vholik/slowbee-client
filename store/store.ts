@@ -1,14 +1,16 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import trackReducer from "./reducers/TracksSlice";
-import playlistsReducer from "./reducers/PlaylistsSlice";
-import loginReducer from "./reducers/LoginSlice";
-import registerReducer from "./reducers/RegisterSlice";
-import uploadReducer from "./reducers/UploadSlice";
-import playlistReducer from "./reducers/PlaylistSlice";
-import playerReducer from "./reducers/PlayerSlice";
-import createPlaylistReducer from "./reducers/CreatePlaylistSlice";
-import addToPlaylistReducer from "./reducers/AddToPlaylistSlice";
-import getFavoritesReducer from "./reducers/GetFavoritesSlice";
+import trackReducer from "./reducers/track/TracksSlice";
+import playlistsReducer from "./reducers/playlist/PlaylistsSlice";
+import loginReducer from "./reducers/auth/LoginSlice";
+import registerReducer from "./reducers/auth/RegisterSlice";
+import uploadReducer from "./reducers/track/UploadSlice";
+import playlistReducer from "./reducers/playlist/PlaylistSlice";
+import playerReducer from "./reducers/player/PlayerSlice";
+import createPlaylistReducer from "./reducers/playlist/CreatePlaylistSlice";
+import addToPlaylistReducer from "./reducers/playlist/AddToPlaylistSlice";
+import getFavoritesReducer from "./reducers/favorite/GetFavoritesSlice";
+import addToFavoritesReducer from "./reducers/favorite/toggleFavorites";
+import checkIsFavoriteReducer from "./reducers/favorite/CheckIsFavorite";
 
 const rootReducer = combineReducers({
   trackReducer,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   playlistReducer,
   addToPlaylistReducer,
   getFavoritesReducer,
+  addToFavoritesReducer,
+  checkIsFavoriteReducer,
 });
 
 export const setupStore = () => {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import instance from "../../axios";
-import { ITrack } from "../../types/track";
+import instance from "../../../axios";
+import { ITrack } from "../../../types/track";
 
 interface IFormData {
   playlistId: string;

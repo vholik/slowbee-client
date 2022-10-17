@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { PlayerState } from "../../types/player";
+import { PlayerState } from "../../../types/player";
 
 const initialState: PlayerState = {
   active: null,

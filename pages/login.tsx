@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
-import { fetchLogin } from "../store/reducers/LoginSlice";
+import { fetchLogin } from "../store/reducers/auth/LoginSlice";
 import styled from "styled-components";
 
 const Login = () => {
@@ -14,7 +14,6 @@ const Login = () => {
     password: "",
   });
 
-
   const submitHandler = () => {
     dispatch(fetchLogin(formData))
       .unwrap()
@@ -23,7 +22,6 @@ const Login = () => {
   };
   return (
     <StyledLogin>
-
       <p className="subtitle">Auth</p>
       <h1 className="title">Login Page</h1>
       <label htmlFor="username" className="label">
@@ -48,7 +46,7 @@ const Login = () => {
       <input
         type="text"
         name="password"
-        placeholder="password"
+        placeholder="Password"
         className="input"
         onChange={(e) =>
           setFormData({

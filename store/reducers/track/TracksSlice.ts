@@ -1,25 +1,26 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { ITrack } from "../../types/track";
+import { ITrack } from "../../../types/track";
 import axios from "axios";
-import instance from "../../axios";
 
 interface TrackState {
-  favorites: ITrack[];
+  tracks: ITrack[];
   isLoading: boolean;
   error: string;
 }
 
 const initialState: TrackState = {
-  favorites: [],
+  tracks: [],
   isLoading: false,
   error: "",
 };
 
-export const fetchFavorites = createAsyncThunk(
-  "favorites",
+export const fetchTracks = createAsyncThunk(
+  "track/fetchAll",
   async (_, thunkAPI) => {
     try {
-      const response = await instance.get<ITrack[]>(`/favorites`);
+      const response = await axios.get<ITrack[]>(
+        "http://localhost:5000/tracks"
+      );
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Can not load tracks");
@@ -27,27 +28,24 @@ export const fetchFavorites = createAsyncThunk(
   }
 );
 
-export const getFavoritesSlice = createSlice({
-  name: "favorites",
+export const TracksSlice = createSlice({
+  name: "track",
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchFavorites.fulfilled.type]: (
-      state,
-      action: PayloadAction<ITrack[]>
-    ) => {
+    [fetchTracks.fulfilled.type]: (state, action: PayloadAction<ITrack[]>) => {
       state.isLoading = false;
       state.error = "";
-      state.favorites = action.payload;
+      state.tracks = action.payload;
     },
-    [fetchFavorites.pending.type]: (state) => {
+    [fetchTracks.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [fetchFavorites.rejected.type]: (state, action: PayloadAction<string>) => {
+    [fetchTracks.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
     },
   },
 });
 
-export default getFavoritesSlice.reducer;
+export default TracksSlice.reducer;

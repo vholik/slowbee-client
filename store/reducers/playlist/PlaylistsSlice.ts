@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { IPlaylist } from "../../types/playlist";
+import { IPlaylist } from "../../../types/playlist";
 import axios from "axios";
-import instance from "../../axios";
+import instance from "../../../axios";
 
 interface PlaylistState {
   playlists: string[];

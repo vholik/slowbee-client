@@ -11,14 +11,22 @@ import {
   changeVolume,
   pauseTrack,
   setCurrentTime,
-} from "../store/reducers/PlayerSlice";
+} from "../store/reducers/player/PlayerSlice";
 import { sToTime } from "./Track";
-import { toggleModal } from "../store/reducers/AddToPlaylistSlice";
+import { toggleModal } from "../store/reducers/playlist/AddToPlaylistSlice";
+import filledHeart from "../public/images/player/favorite-filled-icon.svg";
+import unfilledHeart from "../public/images/player/favorite-unfilled-icon.svg";
+import { updateFavorites } from "../store/reducers/favorite/toggleFavorites";
+import { checkFavorite } from "../store/reducers/favorite/CheckIsFavorite";
+import { fetchFavorites } from "../store/reducers/favorite/GetFavoritesSlice";
 
 export default function Player() {
   const dispatch = useAppDispatch();
   const { active, currentTime, length, pause, volume } = useAppSelector(
     (state) => state.playerReducer
+  );
+  const { isAlreadyFavorite, isLoading } = useAppSelector(
+    (state) => state.checkIsFavoriteReducer
   );
   const volumeRef = useRef(null);
 
@@ -40,15 +48,64 @@ export default function Player() {
     }
   }, [pause]);
 
+  useEffect(() => {
+    if (active) {
+      dispatch(checkFavorite(active._id))
+        .unwrap()
+        .catch((err) => alert(err.message));
+    }
+  }, [isAlreadyFavorite, active]);
+
   const makePause = () => {
     dispatch(pauseTrack(!pause));
   };
+
+  useEffect(() => {
+    if (audioPlayer.current!.currentTime >= length) {
+      dispatch(setCurrentTime(0));
+      dispatch(pauseTrack(true));
+      audioPlayer.current!.currentTime === 0;
+    }
+  }, [currentTime]);
 
   const changeCurrentTime = () => {
     dispatch(setCurrentTime(audioPlayer.current!.currentTime));
   };
   const showModal = () => {
     dispatch(toggleModal());
+  };
+
+  const addFavoriteHandler = () => {
+    if (active) {
+      dispatch(updateFavorites(active._id))
+        .unwrap()
+        .then(() => {
+          //Fetch new favorites
+          dispatch(fetchFavorites());
+          //Check
+          dispatch(checkFavorite(active._id))
+            .unwrap()
+            .catch((err) => alert(err.message));
+          // alert("Successfully added to favorites");
+        })
+        .catch((err) => alert(err.message));
+    }
+  };
+  const removeFavoriteHandler = () => {
+    if (active) {
+      dispatch(updateFavorites(active._id))
+        .unwrap()
+        .then(() => {
+          //Fetch new favorites
+          dispatch(fetchFavorites());
+          //Check
+          dispatch(checkFavorite(active._id))
+            .unwrap()
+            .catch((err) => alert(err.message));
+          // alert("Successfully removed from favorites");
+        })
+        .catch((err) => alert(err.message));
+    }
   };
 
   return (
@@ -76,6 +133,16 @@ export default function Player() {
             <h1 className="track-name">{active?.name}</h1>
             <p className="track-artist">{active?.artist}</p>
           </div>
+
+          {isAlreadyFavorite ? (
+            <div className="favorite" onClick={removeFavoriteHandler}>
+              <Image src={filledHeart} height={25} width={25} />
+            </div>
+          ) : (
+            <div className="favorite" onClick={addFavoriteHandler}>
+              <Image src={unfilledHeart} height={25} width={25} />
+            </div>
+          )}
         </div>
 
         <div className="track-controller">
@@ -156,6 +223,9 @@ const StyledPlayer = styled.div`
   justify-content: space-between;
   align-items: center;
   z-index: 5;
+  .favorite {
+    margin-left: 15px;
+  }
   .bookmark {
     margin-left: 10px;
     cursor: pointer;

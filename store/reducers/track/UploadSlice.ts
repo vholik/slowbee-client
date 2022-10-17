@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import instance from "../../axios";
-import { ITrack } from "../../types/track";
-import { IUploadFormData } from "../../types/uploadFormData";
+import instance from "../../../axios";
+import { ITrack } from "../../../types/track";
+import { IUploadFormData } from "../../../types/uploadFormData";
 
 interface TrackState {
   track: ITrack;

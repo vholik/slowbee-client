@@ -2,12 +2,12 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../store/hooks/redux";
 import { useAppSelector } from "../store/hooks/redux";
-import { fetchPlaylists } from "../store/reducers/PlaylistsSlice";
+import { fetchPlaylists } from "../store/reducers/playlist/PlaylistsSlice";
 import Playlist from "./Playlist";
 import {
   addToPlaylist,
   toggleModal,
-} from "../store/reducers/AddToPlaylistSlice";
+} from "../store/reducers/playlist/AddToPlaylistSlice";
 
 export default function AddToPlaylist() {
   const dispatch = useAppDispatch();

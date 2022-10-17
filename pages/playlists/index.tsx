@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../store/hooks/redux";
 import { useAppDispatch } from "../../store/hooks/redux";
-import { fetchPlaylists } from "../../store/reducers/PlaylistsSlice";
+import { fetchPlaylists } from "../../store/reducers/playlist/PlaylistsSlice";
 import styled from "styled-components";
 import Playlist from "../../components/Playlist";
 import PlaylistCreator from "../../components/PlaylistCreator";

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Track, { LoadingTrack } from "../../components/Track";
 import { useAppSelector } from "../../store/hooks/redux";
 import { useAppDispatch } from "../../store/hooks/redux";
-import { fetchPlaylist } from "../../store/reducers/PlaylistSlice";
+import { fetchPlaylist } from "../../store/reducers/playlist/PlaylistSlice";
 import { StyledTracks } from "../tracks";
 
 const PlaylistPage = () => {

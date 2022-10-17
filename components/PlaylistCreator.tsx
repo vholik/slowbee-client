@@ -3,8 +3,8 @@ import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
 import styled from "styled-components";
 import { firebaseHandler } from "../firebase";
-import { createPlaylist } from "../store/reducers/CreatePlaylistSlice";
-import { fetchPlaylists } from "../store/reducers/PlaylistsSlice";
+import { createPlaylist } from "../store/reducers/playlist/CreatePlaylistSlice";
+import { fetchPlaylists } from "../store/reducers/playlist/PlaylistsSlice";
 
 interface PlaylistCreatorProps {
   setIsShowCreator: any;

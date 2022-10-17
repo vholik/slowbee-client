@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import instance from "../../axios";
+import instance from "../../../axios";
 
 interface IUser {
   id: string;

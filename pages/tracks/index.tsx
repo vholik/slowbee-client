@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import { fetchTracks } from "../../store/reducers/TracksSlice";
+import { fetchTracks } from "../../store/reducers/track/TracksSlice";
 import { useAppSelector } from "../../store/hooks/redux";
 import { useAppDispatch } from "../../store/hooks/redux";
 import Track from "../../components/Track";
 import styled from "styled-components";
 import { LoadingTrack } from "../../components/Track";
-import AddToPlaylist from "../../components/AddToPlaylist";
-import { toggleModal } from "../../store/reducers/AddToPlaylistSlice";
 
 const Tracks = () => {
   const dispatch = useAppDispatch();
   const { tracks, error, isLoading } = useAppSelector(
     (state) => state.trackReducer
   );
-  const { isShowModal } = useAppSelector((state) => state.addToPlaylistReducer);
   useEffect(() => {
     dispatch(fetchTracks())
       .unwrap()
@@ -26,8 +23,8 @@ const Tracks = () => {
   return (
     <StyledTracks>
       <div className="inner">
-        <h3 className="tracks-subtitle">All</h3>
-        <h1 className="tracks-title">Songs from all time</h1>
+        <h3 className="subtitle">All</h3>
+        <h1 className="title">Songs from all time</h1>
         <div className="markups">
           <p className="index markups-item"></p>
           <p className="name markups-item">Name</p>
@@ -86,16 +83,7 @@ export const StyledTracks = styled.div`
       }
     }
   }
-  .tracks-subtitle {
-    font-size: 21px;
-    font-weight: 500;
-    color: var(--grey-60);
-  }
-  .tracks-title {
-    font-size: 41px;
-    margin-top: 15px;
-    font-weight: var(--bold);
-  }
+
   .tracks-wrapper {
     margin-top: 20px;
     border-top: 1px solid var(--grey-10);

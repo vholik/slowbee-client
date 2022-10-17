@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
-import { fetchRegister } from "../store/reducers/RegisterSlice";
+import { fetchRegister } from "../store/reducers/auth/RegisterSlice";
 import styled from "styled-components";
 
 const Login = () => {
@@ -53,7 +53,7 @@ const Login = () => {
       <input
         name="password"
         type="text"
-        placeholder="password"
+        placeholder="Password"
         className="input"
         onChange={(e) =>
           setFormData({
