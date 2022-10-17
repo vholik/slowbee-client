@@ -2,15 +2,45 @@ import styled from "styled-components";
 import searchIcon from "../public/images/header/search-icon.svg";
 import chevronDown from "../public/images/header/chevron-down.svg";
 import Image from "next/image";
+import { KeyboardEventHandler, useState } from "react";
+import Router from "next/router";
+
+interface KeyboardEvent {
+  key: string;
+}
 
 export default function Header() {
+  const [keywords, setKeywords] = useState("");
+  const searchHandler = () => {
+    if (keywords.length > 3) {
+      Router.push(`/search/${keywords}`);
+    }
+  };
+
+  // Enter search
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter") {
+      searchHandler();
+    }
+  };
+
+  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeywords(e.target.value);
+    console.log(keywords);
+  };
   return (
     <StyledHeader>
       <div className="container">
         <div className="header-inner">
           <div className="search">
-            <input type="text" className="search-input" placeholder="Search" />
-            <button className="search-button">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search"
+              onChange={inputHandler}
+              onKeyDown={handleKeyDown}
+            />
+            <button className="search-button" onClick={searchHandler}>
               <Image src={searchIcon} alt="Search" />
             </button>
           </div>

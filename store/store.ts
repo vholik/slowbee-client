@@ -11,6 +11,7 @@ import addToPlaylistReducer from "./reducers/playlist/AddToPlaylistSlice";
 import getFavoritesReducer from "./reducers/favorite/GetFavoritesSlice";
 import addToFavoritesReducer from "./reducers/favorite/toggleFavorites";
 import checkIsFavoriteReducer from "./reducers/favorite/CheckIsFavorite";
+import searchReducer from "./reducers/track/SearchSlice";
 
 const rootReducer = combineReducers({
   trackReducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   getFavoritesReducer,
   addToFavoritesReducer,
   checkIsFavoriteReducer,
+  searchReducer,
 });
 
 export const setupStore = () => {

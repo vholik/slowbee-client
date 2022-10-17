@@ -17,7 +17,7 @@ const initialState: TrackState = {
 
 export const searchTracks = createAsyncThunk(
   "search",
-  async (keywords, thunkAPI) => {
+  async (keywords: string, thunkAPI) => {
     try {
       const response = await instance.get<ITrack[]>(`/search/${keywords}`);
       return response.data;
