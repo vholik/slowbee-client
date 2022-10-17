@@ -27,8 +27,8 @@ export const addToPlaylist = createAsyncThunk(
     try {
       const response = await instance.put<IFormData>("/playlists", formData);
       return response.data;
-    } catch (e) {
-      return thunkAPI.rejectWithValue("Can not add to playlist");
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data);
     }
   }
 );
@@ -50,8 +50,9 @@ export const addToPlaylistSlice = createSlice({
       state.isLoading = true;
     },
     [addToPlaylist.rejected.type]: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
       state.error = action.payload;
+      state.isLoading = false;
+      console.log(action.payload);
     },
   },
 });

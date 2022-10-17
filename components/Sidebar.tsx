@@ -39,11 +39,10 @@ const Sidebar = () => {
             <p className="nav-item__name">Login</p>
           </div>
         </Link>
-        <Link href="/register">
+        <Link href="/favorites">
           <div className="nav-item">
             <Image src={favoritesIcon} alt="Favorites" />
-            <p className="nav-item__name">Register</p>
-            {/* <p className="nav-item__name">Favorites</p> */}
+            <p className="nav-item__name">Favorites</p>
           </div>
         </Link>
         <Link href="/tracks">

@@ -5,6 +5,7 @@ import Image from "next/image";
 import pauseIcon from "../public/images/player/pause-icon.svg";
 import playIcon from "../public/images/player/play-icon.svg";
 import soundIcon from "../public/images/player/volume-icon.svg";
+import bookmarkIcon from "../public/images/player/bookmark-add-icon.svg";
 import { useEffect, useRef } from "react";
 import {
   changeVolume,
@@ -110,7 +111,7 @@ export default function Player() {
             <p className="range-value">{sToTime(length)}</p>
           </div>
         </div>
-        <p onClick={showModal}>Add to playlist</p>
+
         <div className="volume">
           <Image
             alt="Volum"
@@ -129,6 +130,14 @@ export default function Player() {
             onChange={volumeHandler}
           />
           <p className="range-value">100</p>
+          <div className="bookmark" onClick={showModal}>
+            <Image
+              src={bookmarkIcon}
+              alt="Add to playlist"
+              height={25}
+              width={25}
+            />
+          </div>
         </div>
       </StyledPlayer>
     </div>
@@ -146,13 +155,18 @@ const StyledPlayer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 15;
+  z-index: 5;
+  .bookmark {
+    margin-left: 10px;
+    cursor: pointer;
+  }
   .general-info {
     display: flex;
     align-items: center;
     .cover {
       border-radius: 8px;
     }
+
     .name-wrapper {
       margin-left: 15px;
       .track-name {
@@ -187,7 +201,7 @@ const StyledPlayer = styled.div`
       align-items: center;
       gap: 15px;
       input {
-        width: 600px;
+        width: 400px;
       }
     }
   }

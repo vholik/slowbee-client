@@ -21,20 +21,32 @@ export default function AddToPlaylist() {
 
   const addPlaylistHandler = (playlistId: string) => {
     if (active) {
-      dispatch(addToPlaylist({ playlistId, trackId: active._id }));
+      dispatch(addToPlaylist({ playlistId, trackId: active._id }))
+        .unwrap()
+        .then(() => alert("Added to a playlist succesfully"))
+        .catch((err) => alert(err.message));
     }
   };
+
+  const { isShowModal } = useAppSelector((state) => state.addToPlaylistReducer);
 
   const disableModal = () => {
     dispatch(toggleModal());
   };
   return (
-    <StyledAddToPlaylist onClick={disableModal}>
+    <StyledAddToPlaylist
+      onClick={disableModal}
+      className={isShowModal ? "" : "none"}
+    >
       <div className="box" onClick={(e) => e.stopPropagation()}>
         <h1 className="title">Add to your playlists</h1>
         <div className="playlists-wrapper">
           {playlists.map((id) => (
-            <div key={id} onClick={() => addPlaylistHandler(id)}>
+            <div
+              key={id}
+              onClick={() => addPlaylistHandler(id)}
+              className="playlist-inner"
+            >
               <Playlist id={id} />
             </div>
           ))}
@@ -60,6 +72,9 @@ const StyledAddToPlaylist = styled.div`
     font-size: 35px;
     margin: 0;
   }
+  .playlist-inner {
+    width: 200px;
+  }
   .box {
     width: 800px;
     z-index: 6;
@@ -70,9 +85,13 @@ const StyledAddToPlaylist = styled.div`
     flex-direction: column;
     .playlists-wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      grid-gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-column-gap: 10px;
+      grid-row-gap: 25px;
       margin-top: 25px;
+      .playlist-inner {
+        width: fit-content;
+      }
     }
   }
 `;

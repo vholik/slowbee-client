@@ -4,10 +4,11 @@ import playlistsReducer from "./reducers/PlaylistsSlice";
 import loginReducer from "./reducers/LoginSlice";
 import registerReducer from "./reducers/RegisterSlice";
 import uploadReducer from "./reducers/UploadSlice";
+import playlistReducer from "./reducers/PlaylistSlice";
 import playerReducer from "./reducers/PlayerSlice";
 import createPlaylistReducer from "./reducers/CreatePlaylistSlice";
-import playlistReducer from "./reducers/PlaylistSlice";
 import addToPlaylistReducer from "./reducers/AddToPlaylistSlice";
+import getFavoritesReducer from "./reducers/GetFavoritesSlice";
 
 const rootReducer = combineReducers({
   trackReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   createPlaylistReducer,
   playlistReducer,
   addToPlaylistReducer,
+  getFavoritesReducer,
 });
 
 export const setupStore = () => {

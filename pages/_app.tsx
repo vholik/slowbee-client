@@ -4,6 +4,7 @@ import { setupStore } from "../store/store";
 import Sidebar from "../components/Sidebar";
 import "../styles/globals.css";
 import Player from "../components/Player";
+import AddToPlaylist from "../components/AddToPlaylist";
 
 const store = setupStore();
 
@@ -12,6 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <Sidebar />
       <Player />
+      <AddToPlaylist />
       <Component {...pageProps} />
     </Provider>
   );

@@ -86,6 +86,13 @@ a {
   box-sizing: border-box;
 }
 
+.container {
+  margin-left: 280px;
+  padding-left: 100px;
+  padding-top: 50px;
+  max-width: 1000px;
+}
+
 .gradient {
   pointer-events: none !important;
   color: transparent !important;

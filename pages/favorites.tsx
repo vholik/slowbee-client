@@ -1,33 +1,29 @@
-import { useEffect, useState } from "react";
-import { fetchTracks } from "../../store/reducers/TracksSlice";
-import { useAppSelector } from "../../store/hooks/redux";
-import { useAppDispatch } from "../../store/hooks/redux";
-import Track from "../../components/Track";
+import { useEffect } from "react";
 import styled from "styled-components";
-import { LoadingTrack } from "../../components/Track";
-import AddToPlaylist from "../../components/AddToPlaylist";
-import { toggleModal } from "../../store/reducers/AddToPlaylistSlice";
+import Track, { LoadingTrack } from "../components/Track";
+import { useAppSelector } from "../store/hooks/redux";
+import { useAppDispatch } from "../store/hooks/redux";
+import { fetchFavorites } from "../store/reducers/GetFavoritesSlice";
 
-const Tracks = () => {
+export default function Favorites() {
   const dispatch = useAppDispatch();
-  const { tracks, error, isLoading } = useAppSelector(
-    (state) => state.trackReducer
+  const { favorites, error, isLoading } = useAppSelector(
+    (state) => state.getFavoritesReducer
   );
-  const { isShowModal } = useAppSelector((state) => state.addToPlaylistReducer);
+
   useEffect(() => {
-    dispatch(fetchTracks())
+    dispatch(fetchFavorites())
       .unwrap()
-      .then((tracks) => {
-        // console.log(tracks);
+      .then((favorites) => {
+        console.log(favorites);
       })
       .catch((err) => console.log(err));
   }, []);
-
   return (
-    <StyledTracks>
-      <div className="inner">
-        <h3 className="tracks-subtitle">All</h3>
-        <h1 className="tracks-title">Songs from all time</h1>
+    <StyledFavorites>
+      <div className="container">
+        <div className="subtitle">My favorites</div>
+        <div className="title">Listen to your favorites</div>
         <div className="markups">
           <p className="index markups-item"></p>
           <p className="name markups-item">Name</p>
@@ -48,7 +44,7 @@ const Tracks = () => {
           </div>
         ) : (
           <div className="tracks-wrapper">
-            {tracks.map((track) => (
+            {favorites.map((track) => (
               <Track
                 key={track._id}
                 name={track.name}
@@ -62,18 +58,11 @@ const Tracks = () => {
           </div>
         )}
       </div>
-    </StyledTracks>
+    </StyledFavorites>
   );
-};
+}
 
-export const StyledTracks = styled.div`
-  .inner {
-    margin-left: 280px;
-    padding-left: 100px;
-    padding-top: 50px;
-    max-width: 1000px;
-    padding-bottom: 150px;
-  }
+const StyledFavorites = styled.div`
   .markups {
     margin-top: 25px;
     display: grid;
@@ -101,5 +90,3 @@ export const StyledTracks = styled.div`
     border-top: 1px solid var(--grey-10);
   }
 `;
-
-export default Tracks;

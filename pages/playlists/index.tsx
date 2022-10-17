@@ -14,7 +14,7 @@ const Playlists = () => {
   const { playlists, error, isLoading } = useAppSelector(
     (state) => state.playlistsReducer
   );
-
+  console.log(playlists);
   useEffect(() => {
     dispatch(fetchPlaylists());
   }, []);
@@ -41,13 +41,14 @@ const Playlists = () => {
         </div>
       ) : (
         <div className="playlists-wrapper">
-          {playlists.map((id, index) => (
-            <Link href={`/playlists/${id}`} key={index}>
-              <div>
+          {playlists.map((id) => (
+            <Link href={`/playlists/${id}`} key={id}>
+              <div className="playlist-inner">
                 <Playlist id={id} />
               </div>
             </Link>
           ))}
+
           {!isLoading && playlists.length === 0 && (
             <div className="no-playlist">
               <p>
@@ -103,9 +104,13 @@ const StyledPlaylist = styled.div`
   }
   .playlists-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-column-gap: 10px;
+    grid-row-gap: 25px;
     margin-top: 25px;
+    .playlist-inner {
+      width: fit-content;
+    }
   }
 `;
 

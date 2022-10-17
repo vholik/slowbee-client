@@ -1,23 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../store/hooks/redux";
-import { useAppDispatch } from "../store/hooks/redux";
-import { fetchPlaylist } from "../store/reducers/PlaylistSlice";
 import Image from "next/image";
 import Link from "next/link";
+import instance from "../axios";
 
 interface PlaylistProps {
   id: string;
 }
 
 export default function Playlist({ id }: PlaylistProps) {
-  const dispatch = useAppDispatch();
-  const { playlist, error, isLoading } = useAppSelector(
-    (state) => state.playlistReducer
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [playlist, setPlaylist] = useState({
+    _id: "",
+    name: "",
+    user: "",
+    cover: "",
+    tracks: [],
+  });
+
   useEffect(() => {
-    dispatch(fetchPlaylist(id));
+    instance.get(`/playlists/${id}`).then(({ data }) => {
+      setPlaylist(data);
+      setIsLoading(false);
+    });
   }, []);
+
   return (
     <StyledPlaylist>
       {playlist?.cover && !isLoading ? (
