@@ -27,57 +27,54 @@ const Login = () => {
       .then(() => console.log("Registered succesfully"))
       .catch((err) => console.log(err));
   };
-  console.log(message, error);
   return (
-    <StyledRegister>
-      <p className="subtitle">Auth</p>
-      <h1 className="title">Register Page</h1>
-      <label htmlFor="username" className="label">
-        Username
-      </label>
-      <input
-        name="username"
-        type="text"
-        placeholder="Username"
-        className="input"
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            username: e.target.value,
-          })
-        }
-      />
-      <label htmlFor="password" className="label">
-        Password
-      </label>
-      <input
-        name="password"
-        type="text"
-        placeholder="Password"
-        className="input"
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            password: e.target.value,
-          })
-        }
-      />
-      <button onClick={submitHandler} className="btn">
-        Register
-      </button>
-      {message && <p>{message}</p>}
-      {error && <p>{error}</p>}
-    </StyledRegister>
+    <div className="container">
+      <StyledRegister>
+        <p className="subtitle">Auth</p>
+        <h1 className="title">Register Page</h1>
+        <label htmlFor="username" className="label">
+          Username
+        </label>
+        <input
+          name="username"
+          type="text"
+          placeholder="Username"
+          className="input"
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              username: e.target.value,
+            })
+          }
+        />
+        <label htmlFor="password" className="label">
+          Password
+        </label>
+        <input
+          name="password"
+          type="text"
+          placeholder="Password"
+          className="input"
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              password: e.target.value,
+            })
+          }
+        />
+        <button onClick={submitHandler} className="btn">
+          Register
+        </button>
+        {message && <p>{message}</p>}
+        {error && <p>{error}</p>}
+      </StyledRegister>
+    </div>
   );
 };
 
 const StyledRegister = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 1000px;
-  margin-left: 280px;
-  padding-left: 100px;
-  padding-top: 50px;
   .title {
     margin-bottom: 35px;
   }

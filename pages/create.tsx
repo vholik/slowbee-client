@@ -115,121 +115,118 @@ const Create = () => {
 
   return (
     <StyledCreate>
-      <p className="subtitle">Upload a song</p>
-      <Step activeStep={activeStep} setActiveStep={setActiveStep}>
-        <div className={activeStep === 0 ? "wrapper" : "wrapper none"}>
-          <label htmlFor="name" className="label">
-            Name*
-          </label>
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                name: e.target.value,
-              });
-            }}
-            placeholder="Name of track"
-          />
-          <label htmlFor="artist" className="label">
-            Artist name*
-          </label>
-          <input
-            type="text"
-            name="artist"
-            placeholder="Artist name"
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                artist: e.target.value,
-              })
-            }
-          />
-        </div>
-
-        <div className={activeStep === 1 ? "wrapper" : "wrapper none"}>
-          <label htmlFor="cover" className="label">
-            Cover art*
-          </label>
-          <div className="file-input-wrapper">
-            {fileNames.cover ? (
-              <p className="file-name">{fileNames.cover}</p>
-            ) : (
-              <p className="file-name">Please upload your image</p>
-            )}
+      <div className="container">
+        <p className="subtitle">Upload a song</p>
+        <Step activeStep={activeStep} setActiveStep={setActiveStep}>
+          <div className={activeStep === 0 ? "wrapper" : "wrapper none"}>
+            <label htmlFor="name" className="label">
+              Name*
+            </label>
             <input
-              ref={coverRef}
-              type="file"
-              name="cover"
-              accept="image/*"
+              type="text"
+              name="name"
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  name: e.target.value,
+                });
+              }}
+              placeholder="Name of track"
+            />
+            <label htmlFor="artist" className="label">
+              Artist name*
+            </label>
+            <input
+              type="text"
+              name="artist"
+              placeholder="Artist name"
               onChange={(e) =>
-                uploadErrorHandler(
-                  e,
-                  "cover",
-                  setPercent,
-                  setFormData,
-                  SetIsPercentageShow,
-                  formData
-                )
+                setFormData({
+                  ...formData,
+                  artist: e.target.value,
+                })
               }
             />
           </div>
-          {isPercentageShow && <p className="percentage">{percent}% done</p>}
-        </div>
 
-        <div className={activeStep === 2 ? "wrapper" : "wrapper none"}>
-          <label htmlFor="cover" className="label">
-            Audio file*
-          </label>
-          <div className="file-input-wrapper">
-            {fileNames.audio ? (
-              <p className="file-name">{fileNames.audio}</p>
-            ) : (
-              <p className="file-name">Please upload your audio</p>
-            )}
-            <input
-              ref={audioRef}
-              type="file"
-              name="audio"
-              accept=".mp3"
-              onChange={(e) =>
-                uploadErrorHandler(
-                  e,
-                  "audio",
-                  setPercent,
-                  setFormData,
-                  SetIsPercentageShow,
-                  formData
-                )
-              }
-            />
+          <div className={activeStep === 1 ? "wrapper" : "wrapper none"}>
+            <label htmlFor="cover" className="label">
+              Cover art*
+            </label>
+            <div className="file-input-wrapper">
+              {fileNames.cover ? (
+                <p className="file-name">{fileNames.cover}</p>
+              ) : (
+                <p className="file-name">Please upload your image</p>
+              )}
+              <input
+                ref={coverRef}
+                type="file"
+                name="cover"
+                accept="image/*"
+                onChange={(e) =>
+                  uploadErrorHandler(
+                    e,
+                    "cover",
+                    setPercent,
+                    setFormData,
+                    SetIsPercentageShow,
+                    formData
+                  )
+                }
+              />
+            </div>
+            {isPercentageShow && <p className="percentage">{percent}% done</p>}
           </div>
-          {isPercentageShow && <p className="percentage">{percent}% done</p>}
-        </div>
 
-        {activeStep === 2 ? (
-          <button onClick={uploadHandler} className="btn">
-            Upload
-          </button>
-        ) : (
-          <button className="btn" onClick={nextStep}>
-            Next
-            <Image src={arrowRight} alt="Next" />
-          </button>
-        )}
-        {isError && <p className="error">{isError.message}</p>}
-      </Step>
+          <div className={activeStep === 2 ? "wrapper" : "wrapper none"}>
+            <label htmlFor="cover" className="label">
+              Audio file*
+            </label>
+            <div className="file-input-wrapper">
+              {fileNames.audio ? (
+                <p className="file-name">{fileNames.audio}</p>
+              ) : (
+                <p className="file-name">Please upload your audio</p>
+              )}
+              <input
+                ref={audioRef}
+                type="file"
+                name="audio"
+                accept=".mp3"
+                onChange={(e) =>
+                  uploadErrorHandler(
+                    e,
+                    "audio",
+                    setPercent,
+                    setFormData,
+                    SetIsPercentageShow,
+                    formData
+                  )
+                }
+              />
+            </div>
+            {isPercentageShow && <p className="percentage">{percent}% done</p>}
+          </div>
+
+          {activeStep === 2 ? (
+            <button onClick={uploadHandler} className="btn">
+              Upload
+            </button>
+          ) : (
+            <button className="btn" onClick={nextStep}>
+              Next
+              <Image src={arrowRight} alt="Next" />
+            </button>
+          )}
+          {isError && <p className="error">{isError.message}</p>}
+        </Step>
+      </div>
     </StyledCreate>
   );
 };
 
 const StyledCreate = styled.div`
-  padding-top: 50px;
-  margin-left: 280px;
-  padding-left: 100px;
-  max-width: 1000px;
-
   .error {
     font-size: 18px;
     color: #fe2a2a;

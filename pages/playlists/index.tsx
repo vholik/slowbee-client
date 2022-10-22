@@ -14,66 +14,66 @@ const Playlists = () => {
   const { playlists, error, isLoading } = useAppSelector(
     (state) => state.playlistsReducer
   );
-  console.log(playlists);
+
   useEffect(() => {
     dispatch(fetchPlaylists());
   }, []);
   return (
     <StyledPlaylist>
-      {isShowCreator && <PlaylistCreator setIsShowCreator={setIsShowCreator} />}
-      <p className="subtitle">Your playlist</p>
-      <div className="title-wrapper">
-        <h1 className="title">Playlists Page</h1>
-        <p className="create-button" onClick={() => setIsShowCreator(true)}>
-          Create a new
-        </p>
-      </div>
-      {isLoading ? (
-        <div className="playlists-wrapper">
-          <LoadingPlaylist />
-          <LoadingPlaylist />
-          <LoadingPlaylist />
-          <LoadingPlaylist />
-          <LoadingPlaylist />
-          <LoadingPlaylist />
-          <LoadingPlaylist />
-          <LoadingPlaylist />
+      <div className="container">
+        {isShowCreator && (
+          <PlaylistCreator setIsShowCreator={setIsShowCreator} />
+        )}
+        <p className="subtitle">Your playlist</p>
+        <div className="title-wrapper">
+          <h1 className="title">Playlists Page</h1>
+          <p className="create-button" onClick={() => setIsShowCreator(true)}>
+            Create a new
+          </p>
         </div>
-      ) : (
-        <div className="playlists-wrapper">
-          {playlists.map((id) => (
-            <Link href={`/playlists/${id}`} key={id}>
-              <div className="playlist-inner">
-                <Playlist id={id} />
-              </div>
-            </Link>
-          ))}
+        {isLoading ? (
+          <div className="playlists-wrapper">
+            <LoadingPlaylist />
+            <LoadingPlaylist />
+            <LoadingPlaylist />
+            <LoadingPlaylist />
+            <LoadingPlaylist />
+            <LoadingPlaylist />
+            <LoadingPlaylist />
+            <LoadingPlaylist />
+          </div>
+        ) : (
+          <div className="playlists-wrapper">
+            {playlists.map((id) => (
+              <Link href={`/playlists/${id}`} key={id}>
+                <div className="playlist-inner">
+                  <Playlist id={id} />
+                </div>
+              </Link>
+            ))}
 
-          {!isLoading && playlists.length === 0 && (
-            <div className="no-playlist">
-              <p>
-                There is no playlist in the list.{" "}
-                <span
-                  className="create-button"
-                  onClick={() => setIsShowCreator(true)}
-                >
-                  Create a new
-                </span>{" "}
-                to add one.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+            {!isLoading && playlists.length === 0 && (
+              <div className="no-playlist">
+                <p>
+                  There is no playlist in the list.{" "}
+                  <span
+                    className="create-button"
+                    onClick={() => setIsShowCreator(true)}
+                  >
+                    Create a new
+                  </span>{" "}
+                  to add one.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </StyledPlaylist>
   );
 };
 
 const StyledPlaylist = styled.div`
-  margin-left: 280px;
-  padding-left: 100px;
-  padding-top: 50px;
-  max-width: 1000px;
   .no-playlist {
     position: absolute;
     top: 0;

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { PlayerState } from "../../../types/player";
+import { ITrack } from "../../../types/track";
 
 const initialState: PlayerState = {
   active: null,
@@ -17,7 +18,7 @@ export const playerSlice = createSlice({
     pauseTrack: (state, action) => {
       state.pause = action.payload;
     },
-    addActiveTrack: (state, action) => {
+    addActiveTrack: (state, action: PayloadAction<ITrack>) => {
       state.active = action.payload;
       state.pause = false;
       (state.length as any) = state.active?.length;

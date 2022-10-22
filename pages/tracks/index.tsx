@@ -8,21 +8,43 @@ import { LoadingTrack } from "../../components/Track";
 
 const Tracks = () => {
   const dispatch = useAppDispatch();
-  const { tracks, error, isLoading } = useAppSelector(
+  const { tracks, error, isLoading, isAll } = useAppSelector(
     (state) => state.trackReducer
   );
+  const [page, setPage] = useState(0);
+
   useEffect(() => {
-    dispatch(fetchTracks())
-      .unwrap()
-      .then((tracks) => {
-        // console.log(tracks);
-      })
-      .catch((err) => console.log(err));
+    if (!isAll) {
+      dispatch(fetchTracks(page))
+        .unwrap()
+        .then((tracks) => {
+          // console.log(tracks);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [page, isAll]);
+
+  const increasePage = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  const handleScroll = () => {
+    const bottom =
+      Math.ceil(window.innerHeight + window.scrollY) >=
+      document.documentElement.scrollHeight;
+
+    if (bottom) {
+      increasePage();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <StyledTracks>
-      <div className="inner">
+      <div className="container">
         <h3 className="subtitle">All</h3>
         <h1 className="title">Songs from all time</h1>
         <div className="markups">
@@ -31,46 +53,19 @@ const Tracks = () => {
           <p className="artist markups-item">Artist</p>
           <p className="time markups-item">Time</p>
         </div>
-        {isLoading ? (
-          <div className="tracks-wrapper">
-            <LoadingTrack />
-            <LoadingTrack />
-            <LoadingTrack />
-            <LoadingTrack />
-            <LoadingTrack />
-            <LoadingTrack />
-            <LoadingTrack />
-            <LoadingTrack />
-            <LoadingTrack />
-          </div>
-        ) : (
-          <div className="tracks-wrapper">
-            {tracks.map((track) => (
-              <Track
-                key={track._id}
-                name={track.name}
-                artist={track.artist}
-                audio={track.audio}
-                cover={track.cover}
-                length={track.length}
-                id={track._id}
-              />
-            ))}
-          </div>
-        )}
+
+        <div className="tracks-wrapper">
+          {tracks.map((id) => (
+            <Track id={id} />
+          ))}
+        </div>
       </div>
     </StyledTracks>
   );
 };
 
 export const StyledTracks = styled.div`
-  .inner {
-    margin-left: 280px;
-    padding-left: 100px;
-    padding-top: 50px;
-    max-width: 1000px;
-    padding-bottom: 150px;
-  }
+  padding-bottom: 200px;
   .markups {
     margin-top: 25px;
     display: grid;

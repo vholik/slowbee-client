@@ -10,10 +10,14 @@ import tracksIcon from "../public/images/sidebar/tracks-icon.svg";
 import playlistsIcon from "../public/images/sidebar/playlists-icon.svg";
 import favoritesIcon from "../public/images/sidebar/favorites-icon.svg";
 import uploadIcon from "../public/images/sidebar/upload-icon.svg";
+import { useRouter } from "next/router";
 
 const Sidebar = () => {
   const [isAuth, setIsAuth] = useState(false);
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { pathname } = router;
+
   useEffect(() => {
     const localStorageItem = localStorage.getItem("user") as string;
 
@@ -32,27 +36,36 @@ const Sidebar = () => {
         <div className="br"></div>
       </div>
       <div className="nav-wrapper">
-        <Link href="/login">
-          <div className="nav-item">
+        <Link href="/">
+          <div className={pathname === "/" ? "nav-item active" : "nav-item"}>
             <Image src={homeIcon} alt="Home" />
-            {/* <p className="nav-item__name">Home</p> */}
-            <p className="nav-item__name">Login</p>
+            <p className="nav-item__name">Home</p>
           </div>
         </Link>
         <Link href="/favorites">
-          <div className="nav-item">
+          <div
+            className={
+              pathname === "/favorites" ? "nav-item active" : "nav-item"
+            }
+          >
             <Image src={favoritesIcon} alt="Favorites" />
             <p className="nav-item__name">Favorites</p>
           </div>
         </Link>
         <Link href="/tracks">
-          <div className="nav-item">
+          <div
+            className={pathname === "/tracks" ? "nav-item active" : "nav-item"}
+          >
             <Image src={tracksIcon} alt="Tracks" />
             <p className="nav-item__name">Tracks</p>
           </div>
         </Link>
         <Link href="/playlists">
-          <div className="nav-item">
+          <div
+            className={
+              pathname === "/playlists" ? "nav-item active" : "nav-item"
+            }
+          >
             <Image src={playlistsIcon} alt="Playlists" />
             <p className="nav-item__name">Playlists</p>
           </div>
@@ -80,7 +93,8 @@ const StyledNavbar = styled.div`
   position: fixed;
   display: flex;
   flex-direction: column;
-
+  .active {
+  }
   .br {
     border-top: 1px solid var(--grey-10);
     margin-top: 15px;
@@ -89,6 +103,7 @@ const StyledNavbar = styled.div`
   .nav-wrapper {
     margin-top: 35px;
     .nav-item {
+      opacity: 0.6;
       cursor: pointer;
       display: flex;
       gap: 10px;
@@ -97,6 +112,9 @@ const StyledNavbar = styled.div`
         font-size: 18px;
         font-family: var(--font);
       }
+    }
+    .active {
+      opacity: 1;
     }
   }
   .upload-button {

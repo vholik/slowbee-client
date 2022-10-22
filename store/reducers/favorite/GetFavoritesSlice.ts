@@ -7,19 +7,25 @@ interface TrackState {
   favorites: ITrack[];
   isLoading: boolean;
   error: string;
+  isAll: boolean;
 }
 
 const initialState: TrackState = {
   favorites: [],
   isLoading: false,
   error: "",
+  isAll: false,
 };
 
 export const fetchFavorites = createAsyncThunk(
   "favorites",
-  async (_, thunkAPI) => {
+  async (page: number, thunkAPI) => {
     try {
-      const response = await instance.get<ITrack[]>(`/favorites`);
+      const response = await instance.get<ITrack[]>(`/favorites`, {
+        params: {
+          page,
+        },
+      });
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Can not load tracks");
@@ -36,9 +42,12 @@ export const getFavoritesSlice = createSlice({
       state,
       action: PayloadAction<ITrack[]>
     ) => {
+      if (action.payload.length !== 10) {
+        state.isAll = true;
+      }
       state.isLoading = false;
       state.error = "";
-      state.favorites = action.payload;
+      state.favorites = [...state.favorites, ...action.payload];
     },
     [fetchFavorites.pending.type]: (state) => {
       state.isLoading = true;

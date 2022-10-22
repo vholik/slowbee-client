@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Track, { LoadingTrack } from "../components/Track";
 import { useAppSelector } from "../store/hooks/redux";
@@ -7,17 +7,40 @@ import { fetchFavorites } from "../store/reducers/favorite/GetFavoritesSlice";
 
 export default function Favorites() {
   const dispatch = useAppDispatch();
-  const { favorites, error, isLoading } = useAppSelector(
+  const { favorites, error, isLoading, isAll } = useAppSelector(
     (state) => state.getFavoritesReducer
   );
 
+  const [page, setPage] = useState(0);
+
   useEffect(() => {
-    dispatch(fetchFavorites())
-      .unwrap()
-      .then((favorites) => {
-        console.log(favorites);
-      })
-      .catch((err) => console.log(err));
+    if (!isAll) {
+      dispatch(fetchFavorites(page))
+        .unwrap()
+        .then((favorites) => {
+          console.log(favorites);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [page, isAll]);
+
+  const increasePage = () => {
+    setPage((prev) => prev + 1);
+    console.log(page);
+  };
+
+  const handleScroll = () => {
+    const bottom =
+      Math.ceil(window.innerHeight + window.scrollY) >=
+      document.documentElement.scrollHeight;
+
+    if (bottom) {
+      increasePage();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
   }, []);
   return (
     <StyledFavorites>
@@ -63,6 +86,7 @@ export default function Favorites() {
 }
 
 const StyledFavorites = styled.div`
+  padding-bottom: 200px;
   .markups {
     margin-top: 25px;
     display: grid;

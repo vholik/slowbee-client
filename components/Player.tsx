@@ -19,6 +19,7 @@ import unfilledHeart from "../public/images/player/favorite-unfilled-icon.svg";
 import { updateFavorites } from "../store/reducers/favorite/toggleFavorites";
 import { checkFavorite } from "../store/reducers/favorite/CheckIsFavorite";
 import { fetchFavorites } from "../store/reducers/favorite/GetFavoritesSlice";
+import { updateListen } from "../store/reducers/track/updateListensSlice";
 
 export default function Player() {
   const dispatch = useAppDispatch();
@@ -40,21 +41,36 @@ export default function Player() {
   const changeTime = (e: any) => {
     audioPlayer.current!.currentTime = e.target.value;
   };
+
   useEffect(() => {
     if (pause) {
       audioPlayer.current!.pause();
     } else {
+      audioPlayer.current!.load();
       audioPlayer.current!.play();
     }
   }, [pause]);
 
   useEffect(() => {
     if (active) {
+      // Check favorite
       dispatch(checkFavorite(active._id))
         .unwrap()
-        .catch((err) => alert(err.message));
+        .catch((err) => console.log(err));
     }
   }, [isAlreadyFavorite, active]);
+
+  useEffect(() => {
+    if (active) {
+      // Update listen
+      dispatch(updateListen(active._id))
+        .unwrap()
+        .then((favorites) => {
+          console.log(favorites);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [active]);
 
   const makePause = () => {
     dispatch(pauseTrack(!pause));
@@ -81,7 +97,7 @@ export default function Player() {
         .unwrap()
         .then(() => {
           //Fetch new favorites
-          dispatch(fetchFavorites());
+          // dispatch(fetchFavorites());
           //Check
           dispatch(checkFavorite(active._id))
             .unwrap()
@@ -97,7 +113,7 @@ export default function Player() {
         .unwrap()
         .then(() => {
           //Fetch new favorites
-          dispatch(fetchFavorites());
+          // dispatch(fetchFavorites());
           //Check
           dispatch(checkFavorite(active._id))
             .unwrap()

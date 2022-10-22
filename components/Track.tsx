@@ -6,28 +6,35 @@ import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
 import { addActiveTrack } from "../store/reducers/player/PlayerSlice";
 import pauseIcon from "../public/images/tracks/pause-icon.svg";
 import { pauseTrack } from "../store/reducers/player/PlayerSlice";
+import instance from "../axios";
 
 interface TrackProps {
-  name: string;
-  artist: string;
-  audio: string;
-  cover: string;
-  length: number;
   id: string;
 }
 
-const Track: React.FC<TrackProps> = ({
-  artist,
-  audio,
-  cover,
-  length,
-  name,
-  id,
-}) => {
+const Track: React.FC<TrackProps> = ({ id }) => {
   const dispatch = useAppDispatch();
   const { active, pause } = useAppSelector((state) => state.playerReducer);
   const [isPlaying, setIsPlaying] = useState(false);
-  const t;
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [track, setTrack] = useState({
+    _id: "",
+    name: "",
+    artist: "",
+    length: 0,
+    cover: "",
+    audio: "",
+  });
+
+  const { _id, artist, audio, cover, length, name } = track;
+
+  useEffect(() => {
+    instance.get(`/playlists/${id}`).then(({ data }) => {
+      setTrack(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const addActiveSong = () => {
     if (active) {

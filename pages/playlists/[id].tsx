@@ -21,60 +21,59 @@ const PlaylistPage = () => {
   }, []);
   return (
     <StyledPlaylistPage>
-      <p className="subtitle">Your playlists</p>
-      {isLoading ? (
-        <p className="title gradient">Playlist name</p>
-      ) : (
-        <p className="title">{playlist.name}</p>
-      )}
-      {playlist?.tracks?.length === 0 && !isLoading ? (
-        <div className="no-tracks">You haven't added any tracks in here</div>
-      ) : (
-        <StyledTracks>
-          <div className="markups">
-            <p className="index markups-item"></p>
-            <p className="name markups-item">Name</p>
-            <p className="artist markups-item">Artist</p>
-            <p className="time markups-item">Time</p>
-          </div>
+      <div className="container">
+        <p className="subtitle">Your playlists</p>
+        {isLoading ? (
+          <p className="title gradient">Playlist name</p>
+        ) : (
+          <p className="title">{playlist.name}</p>
+        )}
+        {playlist?.tracks?.length === 0 && !isLoading ? (
+          <div className="no-tracks">You haven't added any tracks in here</div>
+        ) : (
+          <StyledTracks>
+            <div className="markups">
+              <p className="index markups-item"></p>
+              <p className="name markups-item">Name</p>
+              <p className="artist markups-item">Artist</p>
+              <p className="time markups-item">Time</p>
+            </div>
 
-          {isLoading ? (
-            <div className="tracks-wrapper">
-              <LoadingTrack />
-              <LoadingTrack />
-              <LoadingTrack />
-              <LoadingTrack />
-              <LoadingTrack />
-              <LoadingTrack />
-              <LoadingTrack />
-              <LoadingTrack />
-              <LoadingTrack />
-            </div>
-          ) : (
-            <div className="tracks-wrapper">
-              {playlist?.tracks?.map((track) => (
-                <Track
-                  key={track._id}
-                  name={track.name}
-                  artist={track.artist}
-                  audio={track.audio}
-                  cover={track.cover}
-                  length={track.length}
-                  id={track._id}
-                />
-              ))}
-            </div>
-          )}
-        </StyledTracks>
-      )}
+            {isLoading ? (
+              <div className="tracks-wrapper">
+                <LoadingTrack />
+                <LoadingTrack />
+                <LoadingTrack />
+                <LoadingTrack />
+                <LoadingTrack />
+                <LoadingTrack />
+                <LoadingTrack />
+                <LoadingTrack />
+                <LoadingTrack />
+              </div>
+            ) : (
+              <div className="tracks-wrapper">
+                {playlist?.tracks?.map((track) => (
+                  <Track
+                    key={track._id}
+                    name={track.name}
+                    artist={track.artist}
+                    audio={track.audio}
+                    cover={track.cover}
+                    length={track.length}
+                    id={track._id}
+                  />
+                ))}
+              </div>
+            )}
+          </StyledTracks>
+        )}
+      </div>
     </StyledPlaylistPage>
   );
 };
 
 const StyledPlaylistPage = styled.div`
-  margin-left: 280px;
-  padding: 50px 0 0 100px;
-  max-width: 1000px;
   .no-tracks {
     position: absolute;
     top: 0;

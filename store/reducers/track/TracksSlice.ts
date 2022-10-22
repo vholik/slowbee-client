@@ -1,25 +1,33 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { ITrack } from "../../../types/track";
 import axios from "axios";
+import instance from "../../../axios";
 
 interface TrackState {
-  tracks: ITrack[];
+  tracks: string[];
   isLoading: boolean;
   error: string;
+  isAll: boolean;
 }
 
 const initialState: TrackState = {
   tracks: [],
   isLoading: false,
   error: "",
+  isAll: false,
 };
 
 export const fetchTracks = createAsyncThunk(
   "track/fetchAll",
-  async (_, thunkAPI) => {
+  async (page: number, thunkAPI) => {
     try {
       const response = await axios.get<ITrack[]>(
-        "http://localhost:5000/tracks"
+        "http://localhost:5000/tracks",
+        {
+          params: {
+            page,
+          },
+        }
       );
       return response.data;
     } catch (e) {
@@ -33,10 +41,13 @@ export const TracksSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchTracks.fulfilled.type]: (state, action: PayloadAction<ITrack[]>) => {
+    [fetchTracks.fulfilled.type]: (state, action: PayloadAction<string[]>) => {
+      if (action.payload.length !== 10) {
+        state.isAll = true;
+      }
       state.isLoading = false;
       state.error = "";
-      state.tracks = action.payload;
+      state.tracks = [...state.tracks, ...action.payload];
     },
     [fetchTracks.pending.type]: (state) => {
       state.isLoading = true;

@@ -44,8 +44,8 @@ export const firebaseHandler = (
   }
   if (type === "cover") {
     if (
-      fileName[fileName.length - 1] !== "jpg" ??
-      fileName[fileName.length - 1] !== "png" ??
+      fileName[fileName.length - 1] !== "jpg" &&
+      fileName[fileName.length - 1] !== "png" &&
       fileName[fileName.length - 1] !== "jpeg"
     ) {
       throw new Error(
