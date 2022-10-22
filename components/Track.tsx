@@ -27,6 +27,7 @@ const Track: React.FC<TrackProps> = ({
   const dispatch = useAppDispatch();
   const { active, pause } = useAppSelector((state) => state.playerReducer);
   const [isPlaying, setIsPlaying] = useState(false);
+  const t;
 
   const addActiveSong = () => {
     if (active) {
