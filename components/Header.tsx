@@ -5,9 +5,10 @@ import Image from "next/image";
 import { KeyboardEventHandler, useState } from "react";
 import Router from "next/router";
 import { searchTracks } from "../store/reducers/track/SearchSlice";
-import { useAppDispatch } from "../store/hooks/redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
 import Head from "next/head";
 import Link from "next/link";
+import { logOut } from "../store/reducers/auth/RefreshSlice";
 
 interface KeyboardEvent {
   key: string;
@@ -17,6 +18,8 @@ export default function Header() {
   const dispatch = useAppDispatch();
 
   const [keywords, setKeywords] = useState("");
+
+  const { payload } = useAppSelector((state) => state.refreshReducer);
 
   const searchHandler = () => {
     if (keywords.length > 3) {
@@ -33,6 +36,10 @@ export default function Header() {
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeywords(e.target.value);
+  };
+
+  const logoutHandler = () => {
+    dispatch(logOut());
   };
 
   return (
@@ -68,7 +75,7 @@ export default function Header() {
                 <Link href={"/register"}>
                   <li>Register</li>
                 </Link>
-                <li>Log out</li>
+                {payload.token && <li onClick={logoutHandler}>Log out</li>}
               </ul>
             </div>
           </div>
@@ -141,9 +148,8 @@ const StyledHeader = styled.div`
         background-color: #282828;
         position: absolute;
         left: 0;
-        padding: 64px 0 0px 0px;
-        top: 0px;
-        border-radius: 35px;
+        top: 69px;
+        border-radius: 5px;
         z-index: 3;
         transition: opacity 0.2s ease;
         ul {
@@ -153,10 +159,6 @@ const StyledHeader = styled.div`
             padding: 15px 0;
             cursor: pointer;
             padding-left: 15px;
-            &:nth-child(3) {
-              border-radius: 0 0 35px 35px;
-              padding-bottom: 20px;
-            }
             &:hover {
               background-color: rgba(0, 0, 0, 0.1);
             }

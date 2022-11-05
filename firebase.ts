@@ -26,7 +26,8 @@ export const firebaseHandler = (
   setPercent: any,
   setFormData: any,
   SetIsPercentageShow: any,
-  formData: any
+  formData: any,
+  setIsOpen: any
 ) => {
   const target = e.target as HTMLInputElement;
   const files = target.files as any;
@@ -54,6 +55,7 @@ export const firebaseHandler = (
       return;
     }
   }
+  setIsOpen(false);
   SetIsPercentageShow(true);
   const storageRef = ref(
     storage,
@@ -76,6 +78,7 @@ export const firebaseHandler = (
       // download url
       getDownloadURL(uploadTask.snapshot.ref).then((url) => {
         console.log(url);
+        setIsOpen(true);
         if (type === "audio") {
           var au = document.createElement("audio");
           au.src = url;

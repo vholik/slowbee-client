@@ -3,16 +3,20 @@ import Image from "next/image";
 import styled from "styled-components";
 import playIcon from "../public/images/tracks/play-icon.svg";
 import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
-import { addActiveTrack } from "../store/reducers/player/PlayerSlice";
+import {
+  addActiveTrack,
+  changePosition,
+} from "../store/reducers/player/PlayerSlice";
 import pauseIcon from "../public/images/tracks/pause-icon.svg";
 import { pauseTrack } from "../store/reducers/player/PlayerSlice";
 import instance from "../axios";
 
 interface TrackProps {
   id: string;
+  position: number;
 }
 
-const Track: React.FC<TrackProps> = ({ id }) => {
+const Track: React.FC<TrackProps> = ({ id, position }) => {
   const dispatch = useAppDispatch();
   const { active, pause } = useAppSelector((state) => state.playerReducer);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -30,7 +34,7 @@ const Track: React.FC<TrackProps> = ({ id }) => {
   const { _id, artist, audio, cover, length, name } = track;
 
   useEffect(() => {
-    instance.get(`/playlists/${id}`).then(({ data }) => {
+    instance.get(`/tracks/${id}`).then(({ data }) => {
       setTrack(data);
       setIsLoading(false);
     });
@@ -44,6 +48,7 @@ const Track: React.FC<TrackProps> = ({ id }) => {
         setIsPlaying(false);
       }
     }
+    dispatch(changePosition(position));
 
     dispatch(
       addActiveTrack({
@@ -53,13 +58,16 @@ const Track: React.FC<TrackProps> = ({ id }) => {
         length,
         name,
         _id: id,
+        position,
       })
     );
   };
+
   const pauseSong = () => {
     dispatch(pauseTrack(true));
     setIsPlaying(false);
   };
+
   useEffect(() => {
     if (active) {
       if (active._id === id) {
@@ -72,6 +80,11 @@ const Track: React.FC<TrackProps> = ({ id }) => {
       setIsPlaying(false);
     }
   }, [active, pause]);
+
+  if (isLoading) return <LoadingTrack />;
+
+  const openTrackDetails = () => {};
+
   return (
     <StyledTrack>
       {isPlaying ? (
@@ -102,7 +115,9 @@ const Track: React.FC<TrackProps> = ({ id }) => {
           alt="Cover art"
           className="cover-art"
         />
-        <p>{name}</p>
+        <p className="track-name" onClick={openTrackDetails}>
+          {name}
+        </p>
       </div>
       <p>{artist}</p>
       <p>{sToTime(length)}</p>
@@ -140,6 +155,9 @@ const StyledTrack = styled.div`
     gap: 15px;
     display: flex;
     align-items: center;
+    .track-name {
+      cursor: pointer;
+    }
   }
 `;
 

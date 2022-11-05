@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import instance from "../axios";
+import noImagePlaylist from "../public/images/playlists/no-image.svg";
 
 interface PlaylistProps {
   id: string;
@@ -27,7 +28,7 @@ export default function Playlist({ id }: PlaylistProps) {
 
   return (
     <StyledPlaylist>
-      {playlist?.cover && !isLoading ? (
+      {/* {playlist?.cover && !isLoading ? (
         <Image
           src={playlist.cover}
           height={200}
@@ -36,7 +37,25 @@ export default function Playlist({ id }: PlaylistProps) {
         />
       ) : (
         <div className="cover gradient"></div>
+      )} */}
+      {isLoading && <div className="cover gradient"></div>}
+      {!isLoading && !playlist.cover && (
+        <Image
+          src={noImagePlaylist}
+          height={200}
+          width={200}
+          objectFit="cover"
+        />
       )}
+      {!isLoading && playlist.cover && (
+        <Image
+          src={playlist.cover}
+          height={200}
+          width={200}
+          objectFit="cover"
+        />
+      )}
+
       {isLoading ? (
         <p className="playlist-name gradient">{"Loading text markup"}</p>
       ) : (

@@ -22,7 +22,7 @@ export const checkFavorite = createAsyncThunk(
       const response = await instance.get<boolean>(`/favorites/${id}`);
       return response.data;
     } catch (e) {
-      return thunkAPI.rejectWithValue("Can not load tracks");
+      return thunkAPI.rejectWithValue("Can check if song is favorite");
     }
   }
 );

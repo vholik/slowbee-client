@@ -4,7 +4,7 @@ import axios from "axios";
 import instance from "../../../axios";
 
 interface TrackState {
-  favorites: ITrack[];
+  favorites: string[];
   isLoading: boolean;
   error: string;
   isAll: boolean;
@@ -21,7 +21,7 @@ export const fetchFavorites = createAsyncThunk(
   "favorites",
   async (page: number, thunkAPI) => {
     try {
-      const response = await instance.get<ITrack[]>(`/favorites`, {
+      const response = await instance.get<string[]>(`/favorites`, {
         params: {
           page,
         },
@@ -40,7 +40,7 @@ export const getFavoritesSlice = createSlice({
   extraReducers: {
     [fetchFavorites.fulfilled.type]: (
       state,
-      action: PayloadAction<ITrack[]>
+      action: PayloadAction<string[]>
     ) => {
       if (action.payload.length !== 10) {
         state.isAll = true;

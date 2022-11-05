@@ -1,4 +1,4 @@
-import { useAppDispatch } from "../store/hooks/redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
 import { refreshToken } from "../store/reducers/auth/RefreshSlice";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -18,6 +18,7 @@ const Sidebar = () => {
   const router = useRouter();
   const { pathname } = router;
 
+  const { payload } = useAppSelector((store) => store.refreshReducer);
   useEffect(() => {
     const localStorageItem = localStorage.getItem("user") as string;
 
@@ -27,7 +28,7 @@ const Sidebar = () => {
         .then(() => setIsAuth(true))
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <StyledNavbar>

@@ -8,24 +8,33 @@ interface TrackState {
   isLoading: boolean;
   error: string;
   isAll: boolean;
+  page: number;
 }
 
 const initialState: TrackState = {
   tracks: [],
   isLoading: false,
   error: "",
+  page: 0,
   isAll: false,
 };
 
+interface ITrackData {
+  page: number;
+  sortingType: string;
+}
+
 export const fetchTracks = createAsyncThunk(
   "track/fetchAll",
-  async (page: number, thunkAPI) => {
+  async (trackData: ITrackData, thunkAPI) => {
+    const { page, sortingType = "newest" } = trackData;
     try {
-      const response = await axios.get<ITrack[]>(
-        "http://localhost:5000/tracks",
+      const response = await axios.get<string[]>(
+        `http://localhost:5000/tracks`,
         {
           params: {
             page,
+            sortingType,
           },
         }
       );
@@ -39,15 +48,29 @@ export const fetchTracks = createAsyncThunk(
 export const TracksSlice = createSlice({
   name: "track",
   initialState,
-  reducers: {},
+  reducers: {
+    changePage: (state, action) => {
+      state.page = action.payload;
+    },
+    changeIsAll: (state) => {
+      state.isAll = false;
+    },
+  },
   extraReducers: {
     [fetchTracks.fulfilled.type]: (state, action: PayloadAction<string[]>) => {
       if (action.payload.length !== 10) {
         state.isAll = true;
       }
+      if (state.page == 0) {
+        state.tracks = action.payload;
+      } else {
+        state.tracks = state.tracks.concat(
+          action.payload.filter((item) => state.tracks.indexOf(item) < 0)
+        );
+      }
+
       state.isLoading = false;
       state.error = "";
-      state.tracks = [...state.tracks, ...action.payload];
     },
     [fetchTracks.pending.type]: (state) => {
       state.isLoading = true;
@@ -58,5 +81,7 @@ export const TracksSlice = createSlice({
     },
   },
 });
+
+export const { changePage, changeIsAll } = TracksSlice.actions;
 
 export default TracksSlice.reducer;

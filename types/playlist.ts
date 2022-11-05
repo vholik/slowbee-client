@@ -4,6 +4,6 @@ export interface IPlaylist {
   _id: string;
   name: string;
   user: string;
-  tracks?: ITrack[];
+  tracks?: string[];
   cover?: string;
 }

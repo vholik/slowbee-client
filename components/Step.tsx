@@ -4,13 +4,14 @@ interface StepProps {
   activeStep: number;
   children: any;
   setActiveStep: any;
+  isOpen: any;
 }
 
-const Step = ({ activeStep, children, setActiveStep }: StepProps) => {
+const Step = ({ activeStep, children, setActiveStep, isOpen }: StepProps) => {
   const activeSteps = ["General info", "Cover art", "Mp3 file upload"];
 
   return (
-    <StyledStep>
+    <StyledStep className={isOpen ? "" : "disabled"}>
       <h1 className="title">
         Step {activeStep + 1}: {activeSteps[activeStep]}
       </h1>

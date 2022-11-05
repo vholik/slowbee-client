@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
-import { setupStore } from "../store/store";
+import { setupStore } from "../store/reducers/store";
 import Sidebar from "../components/Sidebar";
 import "../styles/globals.css";
 import Player from "../components/Player";

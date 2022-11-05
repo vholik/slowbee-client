@@ -8,6 +8,8 @@ import soundIcon from "../public/images/player/volume-icon.svg";
 import bookmarkIcon from "../public/images/player/bookmark-add-icon.svg";
 import { useEffect, useRef } from "react";
 import {
+  addActiveTrack,
+  changePosition,
   changeVolume,
   pauseTrack,
   setCurrentTime,
@@ -18,17 +20,30 @@ import filledHeart from "../public/images/player/favorite-filled-icon.svg";
 import unfilledHeart from "../public/images/player/favorite-unfilled-icon.svg";
 import { updateFavorites } from "../store/reducers/favorite/toggleFavorites";
 import { checkFavorite } from "../store/reducers/favorite/CheckIsFavorite";
-import { fetchFavorites } from "../store/reducers/favorite/GetFavoritesSlice";
 import { updateListen } from "../store/reducers/track/updateListensSlice";
+import skipLeft from "../public/images/player/skip-left.svg";
+import skipRight from "../public/images/player/skip-right.svg";
+import instance from "../axios";
+import { useRouter } from "next/router";
 
 export default function Player() {
   const dispatch = useAppDispatch();
-  const { active, currentTime, length, pause, volume } = useAppSelector(
-    (state) => state.playerReducer
-  );
+
+  const { active, currentTime, length, pause, volume, position } =
+    useAppSelector((state) => state.playerReducer);
+
   const { isAlreadyFavorite, isLoading } = useAppSelector(
     (state) => state.checkIsFavoriteReducer
   );
+
+  const { favorites } = useAppSelector((state) => state.getFavoritesReducer);
+  const { tracks } = useAppSelector((state) => state.trackReducer);
+  const { playlist } = useAppSelector((state) => state.playlistReducer);
+
+  const router = useRouter();
+
+  const route = router.pathname.split("/").filter((i) => i !== "")[0];
+
   const volumeRef = useRef(null);
 
   const audioPlayer = useRef<HTMLAudioElement>(null);
@@ -46,7 +61,6 @@ export default function Player() {
     if (pause) {
       audioPlayer.current!.pause();
     } else {
-      audioPlayer.current!.load();
       audioPlayer.current!.play();
     }
   }, [pause]);
@@ -65,9 +79,7 @@ export default function Player() {
       // Update listen
       dispatch(updateListen(active._id))
         .unwrap()
-        .then((favorites) => {
-          console.log(favorites);
-        })
+        .then(() => {})
         .catch((err) => console.log(err));
     }
   }, [active]);
@@ -77,6 +89,9 @@ export default function Player() {
   };
 
   useEffect(() => {
+    if (currentTime === 0) {
+      audioPlayer.current!.currentTime = 0;
+    }
     if (audioPlayer.current!.currentTime >= length) {
       dispatch(setCurrentTime(0));
       dispatch(pauseTrack(true));
@@ -96,13 +111,9 @@ export default function Player() {
       dispatch(updateFavorites(active._id))
         .unwrap()
         .then(() => {
-          //Fetch new favorites
-          // dispatch(fetchFavorites());
-          //Check
           dispatch(checkFavorite(active._id))
             .unwrap()
             .catch((err) => alert(err.message));
-          // alert("Successfully added to favorites");
         })
         .catch((err) => alert(err.message));
     }
@@ -111,18 +122,81 @@ export default function Player() {
     if (active) {
       dispatch(updateFavorites(active._id))
         .unwrap()
-        .then(() => {
-          //Fetch new favorites
-          // dispatch(fetchFavorites());
-          //Check
+        .then((res) => {
+          console.log(res);
           dispatch(checkFavorite(active._id))
             .unwrap()
             .catch((err) => alert(err.message));
-          // alert("Successfully removed from favorites");
         })
         .catch((err) => alert(err.message));
     }
   };
+
+  const skipLeftHandler = () => {
+    if (position === 0) {
+      dispatch(changePosition(0));
+      return;
+    }
+    dispatch(changePosition(position - 1));
+  };
+
+  const playAgain = () => {
+    dispatch(setCurrentTime(0));
+    audioPlayer.current!.currentTime === 0;
+  };
+
+  const skipRightHandler = () => {
+    if (tracks.length === position + 1) {
+      dispatch(changePosition(0));
+      return;
+    }
+    if (!position) {
+      dispatch(changePosition(0));
+    }
+    dispatch(changePosition(position + 1));
+  };
+
+  useEffect(() => {
+    if (
+      route === "playlists" &&
+      playlist.tracks &&
+      playlist.tracks.length !== 0
+    ) {
+      if (position === playlist.tracks!.length - 1) {
+        dispatch(changePosition(-1));
+      }
+      instance
+        .get(`/tracks/${playlist.tracks[position]}`)
+        .then(({ data }) => {
+          const track = data;
+          dispatch(addActiveTrack({ ...track, position }));
+        })
+        .catch((err) => console.log(err.response));
+      return;
+    }
+
+    if (route === "favorites" && favorites && favorites.length !== 0) {
+      if (position === favorites.length - 1) {
+        dispatch(changePosition(-1));
+      }
+      instance
+        .get(`/tracks/${favorites[position]}`)
+        .then(({ data }) => {
+          const track = data;
+          dispatch(addActiveTrack({ ...track, position }));
+        })
+        .catch((err) => console.log(err.response));
+      return;
+    }
+
+    instance
+      .get(`/tracks/${tracks[position]}`)
+      .then(({ data }) => {
+        const track = data;
+        dispatch(addActiveTrack({ ...track, position }));
+      })
+      .catch((err) => console.log(err.response));
+  }, [position]);
 
   return (
     <div className={active ? "" : "none"}>
@@ -162,24 +236,39 @@ export default function Player() {
         </div>
 
         <div className="track-controller">
-          <div className="pause" onClick={makePause}>
-            {pause ? (
-              <Image
-                alt="Pause"
-                src={playIcon}
-                className="pause-icon"
-                height={14}
-                width={14}
-              />
-            ) : (
-              <Image
-                alt="Pause"
-                src={pauseIcon}
-                className="pause-icon"
-                height={14}
-                width={14}
-              />
-            )}
+          <div className="track-handlers">
+            <Image
+              src={skipLeft}
+              height={20}
+              width={20}
+              onClick={playAgain}
+              onDoubleClick={skipLeftHandler}
+            />
+            <div className="pause" onClick={makePause}>
+              {pause ? (
+                <Image
+                  alt="Pause"
+                  src={playIcon}
+                  className="pause-icon"
+                  height={14}
+                  width={14}
+                />
+              ) : (
+                <Image
+                  alt="Pause"
+                  src={pauseIcon}
+                  className="pause-icon"
+                  height={14}
+                  width={14}
+                />
+              )}
+            </div>
+            <Image
+              src={skipRight}
+              height={20}
+              width={20}
+              onClick={skipRightHandler}
+            />
           </div>
           <div className="timeline">
             <p className="range-value">{sToTime(currentTime)}</p>
@@ -274,7 +363,6 @@ const StyledPlayer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 25px;
     img {
       pointer-events: none;
     }
@@ -282,6 +370,11 @@ const StyledPlayer = styled.div`
   .track-controller {
     display: flex;
     align-items: center;
+    .track-handlers {
+      display: flex;
+      gap: 10px;
+      margin-right: 40px;
+    }
     .timeline {
       display: flex;
       align-items: center;

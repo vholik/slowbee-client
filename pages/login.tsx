@@ -3,6 +3,7 @@ import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
 import { fetchLogin } from "../store/reducers/auth/LoginSlice";
 import styled from "styled-components";
+import { refreshToken, setUser } from "../store/reducers/auth/RefreshSlice";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ const Login = () => {
   const submitHandler = () => {
     dispatch(fetchLogin(formData))
       .unwrap()
-      .then(() => console.log("Logined succesfully"))
+      .then((res) => dispatch(setUser(res)))
       .catch((err) => console.log(err));
   };
   return (

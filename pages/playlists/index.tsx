@@ -18,6 +18,7 @@ const Playlists = () => {
   useEffect(() => {
     dispatch(fetchPlaylists());
   }, []);
+
   return (
     <StyledPlaylist>
       <div className="container">

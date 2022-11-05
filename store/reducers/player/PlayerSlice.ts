@@ -9,16 +9,24 @@ const initialState: PlayerState = {
   length: 0,
   currentTime: 0,
   pause: true,
+  position: 0,
 };
+
+interface IPayload extends ITrack {
+  position: number;
+}
 
 export const playerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
+    changePosition: (state, action: PayloadAction<number>) => {
+      state.position = action.payload;
+    },
     pauseTrack: (state, action) => {
       state.pause = action.payload;
     },
-    addActiveTrack: (state, action: PayloadAction<ITrack>) => {
+    addActiveTrack: (state, action: PayloadAction<IPayload>) => {
       state.active = action.payload;
       state.pause = false;
       (state.length as any) = state.active?.length;
@@ -33,7 +41,12 @@ export const playerSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addActiveTrack, changeVolume, pauseTrack, setCurrentTime } =
-  playerSlice.actions;
+export const {
+  addActiveTrack,
+  changeVolume,
+  pauseTrack,
+  setCurrentTime,
+  changePosition,
+} = playerSlice.actions;
 
 export default playerSlice.reducer;

@@ -6,4 +6,5 @@ export interface PlayerState {
   length: number;
   currentTime: number;
   pause: boolean;
+  position: number;
 }

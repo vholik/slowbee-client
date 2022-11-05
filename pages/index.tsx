@@ -12,6 +12,7 @@ import Tracks from "./tracks";
 import instance from "../axios";
 import { addActiveTrack } from "../store/reducers/player/PlayerSlice";
 import { IPlaylist } from "../types/playlist";
+import { fetchTracks } from "../store/reducers/track/TracksSlice";
 
 const Home: NextPage = () => {
   const dispatch = useAppDispatch();
@@ -36,21 +37,6 @@ const Home: NextPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const playPlaylist = () => {
-    if (playlist.tracks![0].audio) {
-      dispatch(
-        addActiveTrack({
-          audio: playlist.tracks![0].audio,
-          cover: playlist.tracks![0].cover,
-          length: playlist.tracks![0].length,
-          name: playlist.tracks![0].name,
-          _id: playlist.tracks![0]._id,
-          artist: playlist.tracks![0].artist,
-        })
-      );
-    }
-  };
-
   useEffect(() => {
     if (originalPlaylists[1]) {
       instance.get(`/playlists/${originalPlaylists[1]}`).then(({ data }) => {
@@ -71,7 +57,7 @@ const Home: NextPage = () => {
           <div className="subtitle">Popular</div>
           <h1 className="title">Trending slowbees in one playlist</h1>
           <div className="buttons-wrapper">
-            <div className="btn play-button" onClick={playPlaylist}>
+            <div className="btn play-button">
               <Image src={playIcon} alt="Play" height={20} width={20} />
               Play
             </div>

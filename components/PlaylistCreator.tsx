@@ -5,16 +5,24 @@ import styled from "styled-components";
 import { firebaseHandler } from "../firebase";
 import { createPlaylist } from "../store/reducers/playlist/CreatePlaylistSlice";
 import { fetchPlaylists } from "../store/reducers/playlist/PlaylistsSlice";
+import router from "next/router";
+import { editPlaylist } from "../store/reducers/playlist/EditPlaylistSlice";
+import { fetchPlaylist } from "../store/reducers/playlist/PlaylistSlice";
+import trash from "../public/images/playlists/trash.svg";
+import Image from "next/image";
+import { deletePlaylist } from "../store/reducers/playlist/DeletePlaylistSlice";
 
 interface PlaylistCreatorProps {
   setIsShowCreator: any;
+  edit?: boolean;
 }
 
-const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
+const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
   const dispatch = useAppDispatch();
   const { error, isLoading } = useAppSelector(
     (state) => state.createPlaylistReducer
   );
+  const { name } = useAppSelector((state) => state.playlistReducer.playlist);
   const [formData, setFormData] = useState({
     name: "",
     cover: "",
@@ -22,6 +30,12 @@ const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
   const [coverName, setCoverName] = useState("");
   const [percent, setPercent] = useState(0);
   const [isPercentageShow, SetIsPercentageShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const { id } = router.query;
+
+  const disableModal = () => {
+    setIsShowCreator(false);
+  };
 
   const uploadErrorHandler = (
     e: ChangeEvent<HTMLInputElement>,
@@ -31,10 +45,6 @@ const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
     SetIsPercentageShow: any,
     formData: any
   ) => {
-    if ((e.target.files as any)[0].name) {
-      setCoverName((e.target.files as any)[0].name);
-    }
-
     try {
       firebaseHandler(
         e,
@@ -42,29 +52,107 @@ const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
         setPercent,
         setFormData,
         SetIsPercentageShow,
-        formData
+        formData,
+        setIsOpen
       );
+      if ((e.target.files as any)[0].name) {
+        setCoverName((e.target.files as any)[0].name);
+      }
     } catch (error: any) {
       alert(error.message);
     }
   };
 
   const submitHandler = () => {
-    dispatch(createPlaylist(formData))
-      .unwrap()
-      .then((res) => {
-        alert("Created succesfully"),
-          console.log(res),
+    try {
+      if (!isOpen) {
+        throw new Error("Wait until file upload");
+      }
+      if (formData.name.length) {
+        if (formData.name.length < 4) {
+          throw new Error("The playlist name should have at least 4 symbols");
+        }
+      }
+
+      if (!formData.cover && formData.name.length < 4) {
+        throw new Error("Please fill the gaps");
+      }
+
+      dispatch(createPlaylist(formData))
+        .unwrap()
+        .then((res) => {
+          alert("Created succesfully"), console.log(res), disableModal();
           dispatch(fetchPlaylists());
-      })
-      .catch((err: any) => console.log(err));
+        })
+        .catch((err: any) => console.log(err));
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const saveHandler = () => {
+    try {
+      if (!isOpen) {
+        throw new Error("Wait until file upload");
+      }
+      if (formData.name && formData.name.length < 4) {
+        throw new Error("The playlist name should have at least 4 symbols");
+      }
+
+      if (!formData.cover && formData.name.length < 4) {
+        throw new Error("Please fill the gaps");
+      }
+
+      if (formData.name === name) {
+        throw new Error("There is no difference between current playlist name");
+      }
+
+      if (!formData.name) {
+        throw new Error("Please write a name for a playlist");
+      }
+
+      if (typeof id === "string") {
+        dispatch(editPlaylist({ ...formData, id }))
+          .unwrap()
+          .then((res: any) => {
+            setIsShowCreator(false);
+            dispatch(fetchPlaylist(id as string));
+          })
+          .catch((err: any) => alert(err));
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+  const deleteHandler = () => {
+    if (typeof id === "string") {
+      dispatch(deletePlaylist(id))
+        .unwrap()
+        .then((res: any) => {
+          dispatch(fetchPlaylists());
+          setIsShowCreator(false);
+          router.push("/playlists");
+        })
+        .catch((err: any) => alert(err));
+    }
   };
 
   return (
-    <StyledCreator onClick={() => setIsShowCreator(false)}>
+    <StyledCreator onClick={disableModal}>
       <div className="creator-wrapper">
         <div className="box" onClick={(e) => e.stopPropagation()}>
-          <h1 className="title">Create a new playlist</h1>
+          {edit ? (
+            <div className="header-wrapper">
+              <h1 className="title">Edit</h1>
+              <p className="delete" onClick={deleteHandler}>
+                <Image src={trash} alt="Delet" />
+                Delete playlist
+              </p>
+            </div>
+          ) : (
+            <h1 className="title">Create a new playlist</h1>
+          )}
+
           <label htmlFor="Cover*" className="label playlist-name">
             Playlist name*
           </label>
@@ -76,7 +164,7 @@ const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
           <label htmlFor="Cover*" className="label">
-            Cover art*
+            Cover art
           </label>
           <div className="file-input-wrapper">
             {coverName ? (
@@ -100,17 +188,27 @@ const PlaylistCreator = ({ setIsShowCreator }: PlaylistCreatorProps) => {
               }
             />
           </div>
-          {isPercentageShow && <p className="percentage">{percent}</p>}
-          <div className="btn" onClick={submitHandler}>
-            Upload
-          </div>
+
+          {isPercentageShow && <p className="percentage">{percent}%</p>}
+          {edit ? (
+            <button
+              className={isOpen ? "btn" : "btn disabled"}
+              onClick={saveHandler}
+            >
+              Save
+            </button>
+          ) : (
+            <button className="btn" onClick={submitHandler}>
+              Upload
+            </button>
+          )}
         </div>
       </div>
     </StyledCreator>
   );
 };
 
-const StyledCreator = styled.div`
+export const StyledCreator = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -123,6 +221,27 @@ const StyledCreator = styled.div`
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(2.5px);
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0;
+    .delete {
+      cursor: pointer;
+      width: fit-content;
+      text-align: right;
+      color: red;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 18px;
+      transition: opacity linear 0.2s;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
   .title {
     margin-top: 0;
   }

@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Step from "../components/Step";
 import { IUploadFormData } from "../types/uploadFormData";
 import { firebaseHandler } from "../firebase";
@@ -30,16 +30,18 @@ const Create = () => {
     cover: "",
     length: 0,
   });
+  const [isOpen, setIsOpen] = useState(true);
   const uploadHandler = () => {
     setIsError("");
     try {
-      if (
-        !formData.audio ??
-        !formData.cover ??
-        formData.name ??
-        formData.artist
-      ) {
+      if (!formData.audio && !formData.cover) {
         throw new Error("Please fill each gaps");
+      }
+      if (formData.name.length < 4) {
+        throw new Error("Please fill name of the track");
+      }
+      if (formData.artist.length < 4) {
+        throw new Error("Please fill artist name of the track");
       }
       const audioFormat =
         fileNames.audio.split(".")[fileNames.audio.split(".").length - 1];
@@ -63,7 +65,7 @@ const Create = () => {
           return track;
         })
         .then((track) => {
-          console.log(track);
+          alert("Track uploaded succesfully");
         })
         .catch((err) => setIsError(err));
     } catch (error: any) {
@@ -82,6 +84,10 @@ const Create = () => {
     setIsError("");
   };
 
+  useEffect(() => {
+    SetIsPercentageShow(false);
+  }, [activeStep]);
+
   const uploadErrorHandler = (
     e: ChangeEvent<HTMLInputElement>,
     type: string,
@@ -90,14 +96,7 @@ const Create = () => {
     SetIsPercentageShow: any,
     formData: IUploadFormData
   ) => {
-    if ((e.target.files as any)[0].name) {
-      if (type === "cover") {
-        setFileNames({ ...fileNames, cover: (e.target.files as any)[0].name });
-      }
-      if (type === "audio") {
-        setFileNames({ ...fileNames, audio: (e.target.files as any)[0].name });
-      }
-    }
+    setIsOpen(true);
 
     try {
       firebaseHandler(
@@ -106,9 +105,26 @@ const Create = () => {
         setPercent,
         setFormData,
         SetIsPercentageShow,
-        formData
+        formData,
+        setIsOpen
       );
+
+      if ((e.target.files as any)[0].name) {
+        if (type === "cover") {
+          setFileNames({
+            ...fileNames,
+            cover: (e.target.files as any)[0].name,
+          });
+        }
+        if (type === "audio") {
+          setFileNames({
+            ...fileNames,
+            audio: (e.target.files as any)[0].name,
+          });
+        }
+      }
     } catch (error: any) {
+      alert(error);
       setIsError(error.message);
     }
   };
@@ -117,7 +133,11 @@ const Create = () => {
     <StyledCreate>
       <div className="container">
         <p className="subtitle">Upload a song</p>
-        <Step activeStep={activeStep} setActiveStep={setActiveStep}>
+        <Step
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          isOpen={isOpen}
+        >
           <div className={activeStep === 0 ? "wrapper" : "wrapper none"}>
             <label htmlFor="name" className="label">
               Name*
@@ -210,7 +230,7 @@ const Create = () => {
           </div>
 
           {activeStep === 2 ? (
-            <button onClick={uploadHandler} className="btn">
+            <button onClick={uploadHandler} className="btn" disabled={!isOpen}>
               Upload
             </button>
           ) : (

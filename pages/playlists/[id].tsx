@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import PlaylistCreator, {
+  StyledCreator,
+} from "../../components/PlaylistCreator";
 import Track, { LoadingTrack } from "../../components/Track";
 import { useAppSelector } from "../../store/hooks/redux";
 import { useAppDispatch } from "../../store/hooks/redux";
@@ -14,19 +17,36 @@ const PlaylistPage = () => {
   const { playlist, error, isLoading } = useAppSelector(
     (state) => state.playlistReducer
   );
+  const [isShowEdit, setIsShowEdit] = useState(false);
+  const { user } = useAppSelector((store) => store.refreshReducer.payload);
+
   useEffect(() => {
     if (id) {
       dispatch(fetchPlaylist(id as string));
     }
   }, []);
+
   return (
     <StyledPlaylistPage>
+      {isShowEdit && (
+        <PlaylistCreator setIsShowCreator={setIsShowEdit} edit={true} />
+      )}
       <div className="container">
         <p className="subtitle">Your playlists</p>
         {isLoading ? (
           <p className="title gradient">Playlist name</p>
         ) : (
-          <p className="title">{playlist.name}</p>
+          <div className="title-wrapper">
+            <p className="title">{playlist.name}</p>
+            {user.id === playlist.user && (
+              <p
+                className="change-btn"
+                onClick={() => setIsShowEdit(!isShowEdit)}
+              >
+                Edit playlist
+              </p>
+            )}
+          </div>
         )}
         {playlist?.tracks?.length === 0 && !isLoading ? (
           <div className="no-tracks">You haven't added any tracks in here</div>
@@ -39,33 +59,11 @@ const PlaylistPage = () => {
               <p className="time markups-item">Time</p>
             </div>
 
-            {isLoading ? (
-              <div className="tracks-wrapper">
-                <LoadingTrack />
-                <LoadingTrack />
-                <LoadingTrack />
-                <LoadingTrack />
-                <LoadingTrack />
-                <LoadingTrack />
-                <LoadingTrack />
-                <LoadingTrack />
-                <LoadingTrack />
-              </div>
-            ) : (
-              <div className="tracks-wrapper">
-                {playlist?.tracks?.map((track) => (
-                  <Track
-                    key={track._id}
-                    name={track.name}
-                    artist={track.artist}
-                    audio={track.audio}
-                    cover={track.cover}
-                    length={track.length}
-                    id={track._id}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="tracks-wrapper">
+              {playlist?.tracks?.map((id, key) => (
+                <Track id={id} key={id} position={key} />
+              ))}
+            </div>
           </StyledTracks>
         )}
       </div>
@@ -74,6 +72,21 @@ const PlaylistPage = () => {
 };
 
 const StyledPlaylistPage = styled.div`
+  .title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    .title {
+      margin-top: 0;
+    }
+    .change-btn {
+      font-size: 18px;
+      color: var(--grey-60);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
   .no-tracks {
     position: absolute;
     top: 0;

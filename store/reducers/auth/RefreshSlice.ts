@@ -6,7 +6,7 @@ interface IUser {
   username: string;
 }
 
-interface IResponse {
+export interface IResponse {
   token: string;
   user: IUser;
 }
@@ -44,7 +44,21 @@ export const refreshToken = createAsyncThunk(
 export const refreshSlice = createSlice({
   name: "refreshToken",
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      state.payload = action.payload;
+    },
+    logOut: (state) => {
+      localStorage.removeItem("user");
+      state.payload = {
+        token: "",
+        user: {
+          id: "",
+          username: "",
+        },
+      };
+    },
+  },
   extraReducers: {
     [refreshToken.fulfilled.type]: (
       state,
@@ -64,5 +78,7 @@ export const refreshSlice = createSlice({
     },
   },
 });
+
+export const { setUser, logOut } = refreshSlice.actions;
 
 export default refreshSlice.reducer;

@@ -67,16 +67,8 @@ export default function Favorites() {
           </div>
         ) : (
           <div className="tracks-wrapper">
-            {favorites.map((track) => (
-              <Track
-                key={track._id}
-                name={track.name}
-                artist={track.artist}
-                audio={track.audio}
-                cover={track.cover}
-                length={track.length}
-                id={track._id}
-              />
+            {favorites.map((id, key) => (
+              <Track key={id} id={id} position={key} />
             ))}
           </div>
         )}
