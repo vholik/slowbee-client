@@ -11,6 +11,7 @@ import { fetchPlaylist } from "../store/reducers/playlist/PlaylistSlice";
 import trash from "../public/images/playlists/trash.svg";
 import Image from "next/image";
 import { deletePlaylist } from "../store/reducers/playlist/DeletePlaylistSlice";
+import { stateHandler } from "../store/reducers/state/StatusSlice";
 
 interface PlaylistCreatorProps {
   setIsShowCreator: any;
@@ -40,9 +41,9 @@ const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
   const uploadErrorHandler = (
     e: ChangeEvent<HTMLInputElement>,
     type: string,
-    setPercent: any,
+    setPercent: Dispatch<SetStateAction<number>>,
     setFormData: any,
-    SetIsPercentageShow: any,
+    SetIsPercentageShow: Dispatch<SetStateAction<boolean>>,
     formData: any
   ) => {
     try {
@@ -59,7 +60,7 @@ const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
         setCoverName((e.target.files as any)[0].name);
       }
     } catch (error: any) {
-      alert(error.message);
+      stateHandler({ message: error.message, isError: true }, dispatch);
     }
   };
 
@@ -78,15 +79,24 @@ const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
         throw new Error("Please fill the gaps");
       }
 
+      if (formData.name.length > 15) {
+        throw new Error(
+          "The length of the input can not be bigger that 15 symbols"
+        );
+      }
+
       dispatch(createPlaylist(formData))
         .unwrap()
         .then((res) => {
-          alert("Created succesfully"), console.log(res), disableModal();
+          stateHandler({ message: "Created a playlist succesfully" }, dispatch),
+            disableModal();
           dispatch(fetchPlaylists());
         })
-        .catch((err: any) => console.log(err));
-    } catch (error) {
-      alert(error);
+        .catch((err: any) =>
+          stateHandler({ message: err, isError: true }, dispatch)
+        );
+    } catch (error: any) {
+      stateHandler({ message: error.message, isError: true }, dispatch);
     }
   };
 
@@ -99,6 +109,12 @@ const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
         throw new Error("The playlist name should have at least 4 symbols");
       }
 
+      if (formData.name.length > 15) {
+        throw new Error(
+          "The length of the input can not be bigger that 15 symbols"
+        );
+      }
+
       if (!formData.cover && formData.name.length < 4) {
         throw new Error("Please fill the gaps");
       }
@@ -107,21 +123,20 @@ const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
         throw new Error("There is no difference between current playlist name");
       }
 
-      if (!formData.name) {
-        throw new Error("Please write a name for a playlist");
-      }
-
       if (typeof id === "string") {
         dispatch(editPlaylist({ ...formData, id }))
           .unwrap()
           .then((res: any) => {
             setIsShowCreator(false);
             dispatch(fetchPlaylist(id as string));
+            stateHandler({ message: "Edit a playlist succesfully" }, dispatch);
           })
-          .catch((err: any) => alert(err));
+          .catch((err: any) =>
+            stateHandler({ message: err, isError: true }, dispatch)
+          );
       }
-    } catch (error) {
-      alert(error);
+    } catch (error: any) {
+      stateHandler({ message: error.message, isError: true }, dispatch);
     }
   };
   const deleteHandler = () => {
@@ -132,8 +147,11 @@ const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
           dispatch(fetchPlaylists());
           setIsShowCreator(false);
           router.push("/playlists");
+          stateHandler({ message: "Succesfully deleted a playlist" }, dispatch);
         })
-        .catch((err: any) => alert(err));
+        .catch((err: any) =>
+          stateHandler({ message: err.message, isError: true }, dispatch)
+        );
     }
   };
 
@@ -154,7 +172,7 @@ const PlaylistCreator = ({ setIsShowCreator, edit }: PlaylistCreatorProps) => {
           )}
 
           <label htmlFor="Cover*" className="label playlist-name">
-            Playlist name*
+            Playlist name
           </label>
           <input
             name="playlist-name"

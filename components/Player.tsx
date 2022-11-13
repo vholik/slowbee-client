@@ -6,6 +6,8 @@ import pauseIcon from "../public/images/player/pause-icon.svg";
 import playIcon from "../public/images/player/play-icon.svg";
 import soundIcon from "../public/images/player/volume-icon.svg";
 import bookmarkIcon from "../public/images/player/bookmark-add-icon.svg";
+import mutedVolumeIcon from "../public/images/player/volume-mute.svg";
+import volumeMiddleIcon from "../public/images/player/volume-50.svg";
 import { useEffect, useRef } from "react";
 import {
   addActiveTrack,
@@ -20,29 +22,36 @@ import filledHeart from "../public/images/player/favorite-filled-icon.svg";
 import unfilledHeart from "../public/images/player/favorite-unfilled-icon.svg";
 import { updateFavorites } from "../store/reducers/favorite/toggleFavorites";
 import { checkFavorite } from "../store/reducers/favorite/CheckIsFavorite";
-import { updateListen } from "../store/reducers/track/updateListensSlice";
+import { updateListen } from "../store/reducers/track/UpdateListensSlice";
 import skipLeft from "../public/images/player/skip-left.svg";
 import skipRight from "../public/images/player/skip-right.svg";
 import instance from "../axios";
 import { useRouter } from "next/router";
+import { fetchTrack } from "../store/reducers/player/ControllerSlice";
+import { fetchControlledTrack } from "../store/reducers/favorite/FavoriteControllerSlice";
 
 export default function Player() {
   const dispatch = useAppDispatch();
 
-  const { active, currentTime, length, pause, volume, position } =
-    useAppSelector((state) => state.playerReducer);
+  const {
+    active,
+    currentTime,
+    length,
+    pause,
+    volume,
+    directory,
+    position,
+    sortingType,
+  } = useAppSelector((state) => state.playerReducer);
 
   const { isAlreadyFavorite, isLoading } = useAppSelector(
     (state) => state.checkIsFavoriteReducer
   );
 
-  const { favorites } = useAppSelector((state) => state.getFavoritesReducer);
-  const { tracks } = useAppSelector((state) => state.trackReducer);
-  const { playlist } = useAppSelector((state) => state.playlistReducer);
+  // const { favorites } = useAppSelector((state) => state.getFavoritesReducer);
+  // const { playlist } = useAppSelector((state) => state.playlistReducer);
 
   const router = useRouter();
-
-  const route = router.pathname.split("/").filter((i) => i !== "")[0];
 
   const volumeRef = useRef(null);
 
@@ -51,6 +60,11 @@ export default function Player() {
   const volumeHandler = (e: any) => {
     dispatch(changeVolume(e.target.value));
     audioPlayer.current!.volume = e.target.value / 100;
+  };
+
+  const changeVolumeHandler = (percentage: number) => {
+    dispatch(changeVolume(percentage));
+    audioPlayer.current!.volume = percentage / 100;
   };
 
   const changeTime = (e: any) => {
@@ -132,12 +146,46 @@ export default function Player() {
     }
   };
 
-  const skipLeftHandler = () => {
-    if (position === 0) {
-      dispatch(changePosition(0));
-      return;
+  const switchHandler = (type: string) => {
+    const playlistId = router.query.id as string;
+    const isPlaylistDirectory = playlistId && directory === "playlists";
+    if (active) {
+      const query = {
+        id: isPlaylistDirectory ? playlistId : active._id,
+        type: type,
+        dir: directory,
+        filter: sortingType,
+        position,
+      };
+      dispatch(fetchTrack(query))
+        .unwrap()
+        .then((track) => {
+          dispatch(addActiveTrack(track));
+        })
+        .catch((err) => console.log(err));
     }
-    dispatch(changePosition(position - 1));
+  };
+
+  const switchFavoritesHandler = (type: string) => {
+    if (active) {
+      const query = {
+        type: type,
+        position,
+      };
+      dispatch(fetchControlledTrack(query))
+        .unwrap()
+        .then((track) => {
+          dispatch(addActiveTrack(track));
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const skipLeftHandler = () => {
+    if (router.route === "/favorites") {
+      return switchFavoritesHandler("previous");
+    }
+    switchHandler("previous");
   };
 
   const playAgain = () => {
@@ -146,57 +194,11 @@ export default function Player() {
   };
 
   const skipRightHandler = () => {
-    if (tracks.length === position + 1) {
-      dispatch(changePosition(0));
-      return;
+    if (router.route === "/favorites") {
+      return switchFavoritesHandler("next");
     }
-    if (!position) {
-      dispatch(changePosition(0));
-    }
-    dispatch(changePosition(position + 1));
+    switchHandler("next");
   };
-
-  useEffect(() => {
-    if (
-      route === "playlists" &&
-      playlist.tracks &&
-      playlist.tracks.length !== 0
-    ) {
-      if (position === playlist.tracks!.length - 1) {
-        dispatch(changePosition(-1));
-      }
-      instance
-        .get(`/tracks/${playlist.tracks[position]}`)
-        .then(({ data }) => {
-          const track = data;
-          dispatch(addActiveTrack({ ...track, position }));
-        })
-        .catch((err) => console.log(err.response));
-      return;
-    }
-
-    if (route === "favorites" && favorites && favorites.length !== 0) {
-      if (position === favorites.length - 1) {
-        dispatch(changePosition(-1));
-      }
-      instance
-        .get(`/tracks/${favorites[position]}`)
-        .then(({ data }) => {
-          const track = data;
-          dispatch(addActiveTrack({ ...track, position }));
-        })
-        .catch((err) => console.log(err.response));
-      return;
-    }
-
-    instance
-      .get(`/tracks/${tracks[position]}`)
-      .then(({ data }) => {
-        const track = data;
-        dispatch(addActiveTrack({ ...track, position }));
-      })
-      .catch((err) => console.log(err.response));
-  }, [position]);
 
   return (
     <div className={active ? "" : "none"}>
@@ -220,7 +222,12 @@ export default function Player() {
             />
           )}
           <div className="name-wrapper">
-            <h1 className="track-name">{active?.name}</h1>
+            {active && active?.name.length > 10 ? (
+              <h1 className="track-name animated-text">{active?.name}</h1>
+            ) : (
+              <h1 className="track-name">{active?.name}</h1>
+            )}
+
             <p className="track-artist">{active?.artist}</p>
           </div>
 
@@ -285,13 +292,28 @@ export default function Player() {
         </div>
 
         <div className="volume">
-          <Image
-            alt="Volum"
-            src={soundIcon}
-            className="pause-icon"
-            height={25}
-            width={25}
-          />
+          {volume > 50 && (
+            <Image
+              alt="Volume"
+              src={soundIcon}
+              height={25}
+              width={25}
+              onClick={() => changeVolumeHandler(0)}
+            />
+          )}
+          {volume < 50 && volume != 0 && (
+            <Image alt="Volume" src={volumeMiddleIcon} height={25} width={25} />
+          )}
+          {volume == 0 && (
+            <Image
+              alt="Volume"
+              src={mutedVolumeIcon}
+              height={25}
+              width={25}
+              onClick={() => changeVolumeHandler(100)}
+            />
+          )}
+
           <p className="range-value">{volume}</p>
           <input
             type="range"
@@ -344,7 +366,10 @@ const StyledPlayer = styled.div`
 
     .name-wrapper {
       margin-left: 15px;
+      overflow: hidden;
+      width: 200px;
       .track-name {
+        width: max-content;
         font-size: 20px;
         font-weight: 600;
       }
@@ -387,11 +412,25 @@ const StyledPlayer = styled.div`
   .range-value {
     font-size: 18px;
     color: var(--grey-60);
+    width: 50px;
   }
   .volume {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-left: 35px;
+    .range-value {
+      width: 20px;
+    }
+  }
+  .animated-text {
+    animation: textScroll 10s linear infinite;
+  }
+  @keyframes textScroll {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
   }
 `;

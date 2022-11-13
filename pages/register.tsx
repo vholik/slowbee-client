@@ -3,6 +3,7 @@ import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
 import { fetchRegister } from "../store/reducers/auth/RegisterSlice";
 import styled from "styled-components";
+import Router from "next/router";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +25,10 @@ const Login = () => {
     }
     dispatch(fetchRegister(formData))
       .unwrap()
-      .then(() => console.log("Registered succesfully"))
+      .then(() => {
+        alert("Registered succesfully");
+        Router.push("/login");
+      })
       .catch((err) => console.log(err));
   };
   return (
@@ -65,8 +69,6 @@ const Login = () => {
         <button onClick={submitHandler} className="btn">
           Register
         </button>
-        {message && <p>{message}</p>}
-        {error && <p>{error}</p>}
       </StyledRegister>
     </div>
   );

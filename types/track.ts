@@ -1,3 +1,5 @@
+import { IComment } from "./comment";
+
 export interface ITrack {
   _id: string;
   name: string;
@@ -5,4 +7,6 @@ export interface ITrack {
   length: number;
   cover: string;
   audio: string;
+  comments: string[];
+  listens: number;
 }

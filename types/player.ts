@@ -7,4 +7,6 @@ export interface PlayerState {
   currentTime: number;
   pause: boolean;
   position: number;
+  directory: string;
+  sortingType: string;
 }

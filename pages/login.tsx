@@ -4,23 +4,48 @@ import { useAppDispatch } from "../store/hooks/redux";
 import { fetchLogin } from "../store/reducers/auth/LoginSlice";
 import styled from "styled-components";
 import { refreshToken, setUser } from "../store/reducers/auth/RefreshSlice";
+import Router from "next/router";
+import {
+  disableModal,
+  stateHandler,
+  triggerMessage,
+} from "../store/reducers/state/StatusSlice";
 
 const Login = () => {
   const dispatch = useAppDispatch();
-  const { payload, error, isLoading } = useAppSelector(
-    (state) => state.loginReducer
-  );
+  const { isLogged } = useAppSelector((state) => state.refreshReducer);
+  const { error } = useAppSelector((state) => state.loginReducer);
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
   const submitHandler = () => {
-    dispatch(fetchLogin(formData))
-      .unwrap()
-      .then((res) => dispatch(setUser(res)))
-      .catch((err) => console.log(err));
+    try {
+      if (formData.username.length < 4 || formData.username.length > 10) {
+        throw new Error("Username min 4, max 10 symbols");
+      }
+
+      if (formData.password.length < 4 || formData.password.length > 10) {
+        throw new Error("Password length min 4, max 10 symbols");
+      }
+
+      dispatch(fetchLogin(formData))
+        .unwrap()
+        .then((res) => {
+          stateHandler({ message: "Succesfully logged in" }, dispatch);
+          dispatch(setUser(res));
+          Router.push("/");
+        })
+        .catch((err: string) => {
+          stateHandler({ isError: true, message: err }, dispatch);
+        });
+    } catch (err: any) {
+      stateHandler({ isError: true, message: err.message }, dispatch);
+    }
   };
+
   return (
     <div className="container">
       <StyledLogin>
@@ -60,8 +85,6 @@ const Login = () => {
         <button onClick={submitHandler} className="btn">
           Login
         </button>
-        {payload.token && <p>Success</p>}
-        {error && <p>{error}</p>}
       </StyledLogin>
     </div>
   );
@@ -70,7 +93,9 @@ const Login = () => {
 const StyledLogin = styled.div`
   display: flex;
   flex-direction: column;
-
+  .error {
+    color: red;
+  }
   .title {
     margin-bottom: 35px;
   }

@@ -8,23 +8,31 @@ import {
   addToPlaylist,
   toggleModal,
 } from "../store/reducers/playlist/AddToPlaylistSlice";
+import { stateHandler } from "../store/reducers/state/StatusSlice";
 
 export default function AddToPlaylist() {
   const dispatch = useAppDispatch();
   const { playlists, error, isLoading } = useAppSelector(
     (state) => state.playlistsReducer
   );
+  const { isLogged } = useAppSelector((state) => state.refreshReducer);
   const { active } = useAppSelector((state) => state.playerReducer);
   useEffect(() => {
-    dispatch(fetchPlaylists());
+    if (isLogged) {
+      dispatch(fetchPlaylists());
+    }
   }, []);
 
   const addPlaylistHandler = (playlistId: string) => {
     if (active) {
       dispatch(addToPlaylist({ playlistId, trackId: active._id }))
         .unwrap()
-        .then(() => alert("Added to a playlist succesfully"))
-        .catch((err) => alert(err.message));
+        .then(() =>
+          stateHandler({ message: "Added to a playlist succesfully" }, dispatch)
+        )
+        .catch((err) =>
+          stateHandler({ message: err.message, isError: true }, dispatch)
+        );
     }
   };
 

@@ -7,6 +7,9 @@ import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
 import styled from "styled-components";
 import arrowRight from "../public/images/upload/dark-arrow-right.svg";
 import Image from "next/image";
+import Router from "next/router";
+import AuthFirst from "../components/AuthFirst";
+import { stateHandler } from "../store/reducers/state/StatusSlice";
 
 const Create = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +46,11 @@ const Create = () => {
       if (formData.artist.length < 4) {
         throw new Error("Please fill artist name of the track");
       }
+      if (formData.name.length > 15 || formData.artist.length > 15) {
+        throw new Error(
+          "The length of the input can not be bigger that 15 symbols"
+        );
+      }
       const audioFormat =
         fileNames.audio.split(".")[fileNames.audio.split(".").length - 1];
       const coverFormat =
@@ -57,17 +65,21 @@ const Create = () => {
       ) {
         throw new Error("Format of the image should be jpeg, png or jpg");
       }
+
       dispatch(uploadTrack(formData))
         .unwrap()
         .then((track) => {
-          console.log("Song created succesfully");
+          stateHandler({ message: "Song succesfuly has created" }, dispatch);
           setIsError("");
           return track;
         })
         .then((track) => {
-          alert("Track uploaded succesfully");
+          Router.push("/");
+          console.log(track);
         })
-        .catch((err) => setIsError(err));
+        .catch((err) =>
+          stateHandler({ message: err, isError: true }, dispatch)
+        );
     } catch (error: any) {
       setIsError(error);
     }
@@ -128,6 +140,12 @@ const Create = () => {
       setIsError(error.message);
     }
   };
+
+  const { isLogged } = useAppSelector((state) => state.refreshReducer);
+
+  if (!isLogged) {
+    return <AuthFirst />;
+  }
 
   return (
     <StyledCreate>

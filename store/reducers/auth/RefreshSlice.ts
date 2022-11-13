@@ -15,6 +15,7 @@ interface LoginState {
   payload: IResponse;
   isLoading: boolean;
   error: string;
+  isLogged: boolean;
 }
 
 const initialState: LoginState = {
@@ -25,6 +26,7 @@ const initialState: LoginState = {
       username: "",
     },
   },
+  isLogged: false,
   isLoading: false,
   error: "",
 };
@@ -47,8 +49,10 @@ export const refreshSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.payload = action.payload;
+      state.isLogged = true;
     },
     logOut: (state) => {
+      state.isLogged = false;
       localStorage.removeItem("user");
       state.payload = {
         token: "",
@@ -68,6 +72,7 @@ export const refreshSlice = createSlice({
       state.error = "";
       state.payload = action.payload;
       localStorage.setItem("user", JSON.stringify(action.payload));
+      state.isLogged = true;
     },
     [refreshToken.pending.type]: (state) => {
       state.isLoading = true;

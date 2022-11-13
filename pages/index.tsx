@@ -31,9 +31,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     dispatch(fetchOriginals())
       .unwrap()
-      .then((playlists) => {
-        console.log(playlists);
-      })
+      .then((playlists) => {})
       .catch((err) => console.log(err));
   }, []);
 
@@ -57,13 +55,9 @@ const Home: NextPage = () => {
           <div className="subtitle">Popular</div>
           <h1 className="title">Trending slowbees in one playlist</h1>
           <div className="buttons-wrapper">
-            <div className="btn play-button">
-              <Image src={playIcon} alt="Play" height={20} width={20} />
-              Play
-            </div>
             {originalPlaylists[1] && (
               <Link href={`/playlists/${originalPlaylists[1]}`}>
-                <div className="btn">View playlist</div>
+                <div className="btn view-button">View playlist</div>
               </Link>
             )}
           </div>
@@ -110,7 +104,7 @@ const StyledHome = styled.div`
       font-size: 48px;
     }
   }
-  .play-button {
+  .view-button {
     background-color: white;
     color: var(--dark);
     &:hover {
@@ -128,7 +122,7 @@ const StyledHome = styled.div`
     .playlists-wrapper {
       margin-top: 25px;
       display: flex;
-      gap: 60px;
+      gap: 30px;
     }
   }
   .tracks-wrapper {

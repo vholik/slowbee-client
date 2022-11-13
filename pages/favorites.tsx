@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import AuthFirst from "../components/AuthFirst";
 import Track, { LoadingTrack } from "../components/Track";
 import { useAppSelector } from "../store/hooks/redux";
 import { useAppDispatch } from "../store/hooks/redux";
@@ -11,22 +12,25 @@ export default function Favorites() {
     (state) => state.getFavoritesReducer
   );
 
+  const { isLogged } = useAppSelector((state) => state.refreshReducer);
+
+  if (!isLogged) {
+    return <AuthFirst />;
+  }
+
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     if (!isAll) {
       dispatch(fetchFavorites(page))
         .unwrap()
-        .then((favorites) => {
-          console.log(favorites);
-        })
+        .then((favorites) => {})
         .catch((err) => console.log(err));
     }
   }, [page, isAll]);
 
   const increasePage = () => {
     setPage((prev) => prev + 1);
-    console.log(page);
   };
 
   const handleScroll = () => {
@@ -42,6 +46,7 @@ export default function Favorites() {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <StyledFavorites>
       <div className="container">

@@ -9,6 +9,7 @@ interface TrackState {
   error: string;
   isAll: boolean;
   page: number;
+  sortingType: string;
 }
 
 const initialState: TrackState = {
@@ -17,6 +18,7 @@ const initialState: TrackState = {
   error: "",
   page: 0,
   isAll: false,
+  sortingType: "popular",
 };
 
 interface ITrackData {
@@ -49,6 +51,9 @@ export const TracksSlice = createSlice({
   name: "track",
   initialState,
   reducers: {
+    changeSortingType: (state, action) => {
+      state.sortingType = action.payload;
+    },
     changePage: (state, action) => {
       state.page = action.payload;
     },
@@ -82,6 +87,7 @@ export const TracksSlice = createSlice({
   },
 });
 
-export const { changePage, changeIsAll } = TracksSlice.actions;
+export const { changePage, changeIsAll, changeSortingType } =
+  TracksSlice.actions;
 
 export default TracksSlice.reducer;

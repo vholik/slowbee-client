@@ -10,6 +10,11 @@ import {
 import pauseIcon from "../public/images/tracks/pause-icon.svg";
 import { pauseTrack } from "../store/reducers/player/PlayerSlice";
 import instance from "../axios";
+import { useRouter } from "next/router";
+import { changeSortingType } from "../store/reducers/player/PlayerSlice";
+import { changeTrackSortingType } from "../store/reducers/player/ControllerSlice";
+import { toggleModal } from "../store/reducers/track/TrackDetailsSlice";
+import { addTrackDetails } from "../store/reducers/track/TrackDetailsSlice";
 
 interface TrackProps {
   id: string;
@@ -19,19 +24,26 @@ interface TrackProps {
 const Track: React.FC<TrackProps> = ({ id, position }) => {
   const dispatch = useAppDispatch();
   const { active, pause } = useAppSelector((state) => state.playerReducer);
+  // const { sortingType } = useAppSelector((state) => state.trackReducer);
+  const { sortingType } = useAppSelector((state) => state.trackReducer);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const router = useRouter();
+  const directory = router.pathname.split("/").filter((i) => i !== "")[0];
 
   const [isLoading, setIsLoading] = useState(true);
   const [track, setTrack] = useState({
-    _id: "",
     name: "",
     artist: "",
     length: 0,
     cover: "",
     audio: "",
+    listens: 0,
+    _id: "",
+    comments: [],
   });
 
-  const { _id, artist, audio, cover, length, name } = track;
+  const { _id, artist, audio, cover, length, name, comments, listens } = track;
 
   useEffect(() => {
     instance.get(`/tracks/${id}`).then(({ data }) => {
@@ -48,7 +60,10 @@ const Track: React.FC<TrackProps> = ({ id, position }) => {
         setIsPlaying(false);
       }
     }
+
     dispatch(changePosition(position));
+    dispatch(changeTrackSortingType(sortingType));
+    dispatch(changeSortingType(sortingType));
 
     dispatch(
       addActiveTrack({
@@ -57,8 +72,12 @@ const Track: React.FC<TrackProps> = ({ id, position }) => {
         cover,
         length,
         name,
+        comments,
+        listens,
         _id: id,
         position,
+        directory,
+        sortingType,
       })
     );
   };
@@ -83,7 +102,10 @@ const Track: React.FC<TrackProps> = ({ id, position }) => {
 
   if (isLoading) return <LoadingTrack />;
 
-  const openTrackDetails = () => {};
+  const openTrackDetails = () => {
+    dispatch(toggleModal());
+    dispatch(addTrackDetails(track));
+  };
 
   return (
     <StyledTrack>

@@ -8,20 +8,20 @@ import { LoadingTrack } from "../../components/Track";
 import { changePage } from "../../store/reducers/track/TracksSlice";
 import { changeIsAll } from "../../store/reducers/track/TracksSlice";
 import { changePosition } from "../../store/reducers/player/PlayerSlice";
+import { changeSortingType } from "../../store/reducers/track/TracksSlice";
 
 const Tracks = () => {
   const dispatch = useAppDispatch();
-  const { tracks, error, isLoading, isAll } = useAppSelector(
+  const { tracks, error, isLoading, isAll, sortingType } = useAppSelector(
     (state) => state.trackReducer
   );
 
   const { position } = useAppSelector((state) => state.playerReducer);
 
   const [page, setPage] = useState(0);
-  const [sortingType, setSortingType] = useState("popular");
 
   const changeSorting = (e: any) => {
-    setSortingType(e.target.value);
+    dispatch(changeSortingType(e.target.value));
     setPage(0);
     dispatch(changePage(0));
     dispatch(changeIsAll());
@@ -30,6 +30,7 @@ const Tracks = () => {
   const fetchTracksHandler = () => {
     if (!isAll) {
       dispatch(changePage(page));
+
       dispatch(fetchTracks({ page, sortingType }))
         .unwrap()
         .then(() => {})
@@ -44,10 +45,6 @@ const Tracks = () => {
   useEffect(() => {
     fetchTracksHandler();
   }, []);
-
-  useEffect(() => {
-    dispatch(changePosition(-1));
-  }, [sortingType]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);

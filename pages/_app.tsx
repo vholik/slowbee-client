@@ -6,6 +6,8 @@ import "../styles/globals.css";
 import Player from "../components/Player";
 import AddToPlaylist from "../components/AddToPlaylist";
 import Header from "../components/Header";
+import TrackDetails from "../components/TrackDetails";
+import Status from "../components/Status";
 
 const store = setupStore();
 
@@ -16,6 +18,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Header />
       <Player />
       <AddToPlaylist />
+      <TrackDetails />
+      <Status />
       <Component {...pageProps} />
     </Provider>
   );

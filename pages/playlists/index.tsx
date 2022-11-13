@@ -7,6 +7,7 @@ import Playlist from "../../components/Playlist";
 import PlaylistCreator from "../../components/PlaylistCreator";
 import { LoadingPlaylist } from "../../components/Playlist";
 import Link from "next/link";
+import AuthFirst from "../../components/AuthFirst";
 
 const Playlists = () => {
   const [isShowCreator, setIsShowCreator] = useState(false);
@@ -14,6 +15,11 @@ const Playlists = () => {
   const { playlists, error, isLoading } = useAppSelector(
     (state) => state.playlistsReducer
   );
+  const { isLogged } = useAppSelector((state) => state.refreshReducer);
+
+  if (!isLogged) {
+    return <AuthFirst />;
+  }
 
   useEffect(() => {
     dispatch(fetchPlaylists());
@@ -106,8 +112,8 @@ const StyledPlaylist = styled.div`
   .playlists-wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-column-gap: 10px;
-    grid-row-gap: 25px;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
     margin-top: 25px;
     .playlist-inner {
       width: fit-content;

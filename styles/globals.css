@@ -14,6 +14,7 @@ body {
   --grey-60: rgba(255, 255, 255, 0.6);
   --dark: #151515;
   --bold: 700;
+  overflow-x: hidden;
 }
 
 .none {

@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { ChangeEvent } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA-G3Jr-mWKnff2Jkpd2W_CCrkgh_D3PAY",
@@ -23,11 +23,11 @@ export default storage;
 export const firebaseHandler = (
   e: ChangeEvent<HTMLInputElement>,
   type: string,
-  setPercent: any,
+  setPercent: Dispatch<SetStateAction<number>>,
   setFormData: any,
-  SetIsPercentageShow: any,
+  SetIsPercentageShow: Dispatch<SetStateAction<boolean>>,
   formData: any,
-  setIsOpen: any
+  setIsOpen: Dispatch<SetStateAction<boolean>>
 ) => {
   const target = e.target as HTMLInputElement;
   const files = target.files as any;
@@ -79,6 +79,7 @@ export const firebaseHandler = (
       getDownloadURL(uploadTask.snapshot.ref).then((url) => {
         console.log(url);
         setIsOpen(true);
+        SetIsPercentageShow(false);
         if (type === "audio") {
           var au = document.createElement("audio");
           au.src = url;

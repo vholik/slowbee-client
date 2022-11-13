@@ -12,10 +12,14 @@ import getFavoritesReducer from "./favorite/GetFavoritesSlice";
 import addToFavoritesReducer from "./favorite/toggleFavorites";
 import checkIsFavoriteReducer from "./favorite/CheckIsFavorite";
 import searchReducer from "./track/SearchSlice";
-import updateListensReducer from "./track/updateListensSlice";
+import updateListensReducer from "./track/UpdateListensSlice";
 import originalsReducer from "./playlist/OriginalsSlice";
 import refreshReducer from "./auth/RefreshSlice";
 import deletePlaylistReducer from "./playlist/DeletePlaylistSlice";
+import playerControllerReducer from "./player/ControllerSlice";
+import trackDetailsReducer from "./track/TrackDetailsSlice";
+import addCommentReducer from "./track/CommentSlice";
+import statusReducer from "./state/StatusSlice";
 
 const rootReducer = combineReducers({
   trackReducer,
@@ -35,6 +39,10 @@ const rootReducer = combineReducers({
   originalsReducer,
   refreshReducer,
   deletePlaylistReducer,
+  playerControllerReducer,
+  trackDetailsReducer,
+  addCommentReducer,
+  statusReducer,
 });
 
 export const setupStore = () => {

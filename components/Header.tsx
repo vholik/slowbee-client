@@ -8,6 +8,7 @@ import { searchTracks } from "../store/reducers/track/SearchSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
 import Head from "next/head";
 import Link from "next/link";
+import { stateHandler } from "../store/reducers/state/StatusSlice";
 import { logOut } from "../store/reducers/auth/RefreshSlice";
 
 interface KeyboardEvent {
@@ -22,7 +23,7 @@ export default function Header() {
   const { payload } = useAppSelector((state) => state.refreshReducer);
 
   const searchHandler = () => {
-    if (keywords.length > 3) {
+    if (keywords.length > 2) {
       dispatch(searchTracks(keywords.replace(/[^a-zA-Z0-9]/g, "")));
       Router.push(`/search/${keywords.replace(/[^a-zA-Z0-9]/g, " ")}`);
     }
@@ -40,6 +41,7 @@ export default function Header() {
 
   const logoutHandler = () => {
     dispatch(logOut());
+    stateHandler({ message: "Succesfully logged out" }, dispatch);
   };
 
   return (
@@ -68,15 +70,29 @@ export default function Header() {
               Account <Image src={chevronDown} alt="Settings" />
             </div>
             <div className="account-modal">
-              <ul>
-                <Link href={"/login"}>
-                  <li>Log in</li>
-                </Link>
-                <Link href={"/register"}>
-                  <li>Register</li>
-                </Link>
-                {payload.token && <li onClick={logoutHandler}>Log out</li>}
-              </ul>
+              {payload.token ? (
+                <ul>
+                  <Link href={"/settings"}>
+                    <li>Settings</li>
+                  </Link>
+                  <Link href={"/about"}>
+                    <li>About</li>
+                  </Link>
+                  <li onClick={logoutHandler}>Log out</li>
+                </ul>
+              ) : (
+                <ul>
+                  <Link href={"/login"}>
+                    <li>Log in</li>
+                  </Link>
+                  <Link href={"/register"}>
+                    <li>Register</li>
+                  </Link>
+                  <Link href={"/about"}>
+                    <li>About</li>
+                  </Link>
+                </ul>
+              )}
             </div>
           </div>
         </div>
@@ -86,6 +102,7 @@ export default function Header() {
 }
 
 const StyledHeader = styled.div`
+  z-index: 5;
   .container {
     padding-top: 25px;
     max-width: none;
@@ -148,7 +165,8 @@ const StyledHeader = styled.div`
         background-color: #282828;
         position: absolute;
         left: 0;
-        top: 69px;
+        top: 64px;
+
         border-radius: 5px;
         z-index: 3;
         transition: opacity 0.2s ease;
