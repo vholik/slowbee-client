@@ -4,9 +4,14 @@ const nextConfig = {
   swcMinify: true,
 };
 
-module.exports = nextConfig;
 module.exports = {
+  env: {
+    server: "https://slowbee.herokuapp.com",
+  },
   images: {
     domains: ["firebasestorage.googleapis.com"],
+  },
+  devIndicators: {
+    buildActivity: false,
   },
 };

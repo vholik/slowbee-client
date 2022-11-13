@@ -31,15 +31,12 @@ export const fetchTracks = createAsyncThunk(
   async (trackData: ITrackData, thunkAPI) => {
     const { page, sortingType = "newest" } = trackData;
     try {
-      const response = await instance.get<string[]>(
-        `http://localhost:5000/tracks`,
-        {
-          params: {
-            page,
-            sortingType,
-          },
-        }
-      );
+      const response = await instance.get<string[]>(`tracks`, {
+        params: {
+          page,
+          sortingType,
+        },
+      });
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Can not load tracks");

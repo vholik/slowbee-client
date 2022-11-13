@@ -30,9 +30,7 @@ export const updateListen = createAsyncThunk(
   "updateListen",
   async (id: string, thunkAPI) => {
     try {
-      const response = await instance.put<ITrack>(
-        `http://localhost:5000/tracks/${id}`
-      );
+      const response = await instance.put<ITrack>(`tracks/${id}`);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Can not load tracks");

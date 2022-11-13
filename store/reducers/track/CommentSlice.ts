@@ -24,7 +24,7 @@ export const addComment = createAsyncThunk(
     const { id, text } = addCommentParams;
     try {
       const response = await instance.put<string>(
-        `http://localhost:5000/tracks/comments/${id}`,
+        `tracks/comments/${id}`,
         null,
         {
           params: {

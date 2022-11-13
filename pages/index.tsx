@@ -1,18 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styled from "styled-components";
-import playIcon from "../public/images/player/play-icon.svg";
-import Image from "next/image";
 import Playlist from "../components/Playlist";
+import { LoadingPlaylist } from "../components/Playlist";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks/redux";
 import { fetchOriginals } from "../store/reducers/playlist/OriginalsSlice";
 import Link from "next/link";
 import Tracks from "./tracks";
 import instance from "../axios";
-import { addActiveTrack } from "../store/reducers/player/PlayerSlice";
 import { IPlaylist } from "../types/playlist";
-import { fetchTracks } from "../store/reducers/track/TracksSlice";
 
 const Home: NextPage = () => {
   const dispatch = useAppDispatch();
@@ -65,6 +62,13 @@ const Home: NextPage = () => {
         <div className="original-playlists">
           <div className="subtitle">Playlists</div>
           <h1 className="title">Original Slowbee playlists</h1>
+          {isLoading && (
+            <div className="playlists-wrapper">
+              <LoadingPlaylist />
+              <LoadingPlaylist />
+              <LoadingPlaylist />
+            </div>
+          )}
           <div className="playlists-wrapper">
             {originalPlaylists.map((id) => (
               <Link href={`/playlists/${id}`} key={id}>

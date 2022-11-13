@@ -39,10 +39,7 @@ export const fetchLogin = createAsyncThunk(
   "auth/login",
   async (formData: IFormData, thunkAPI) => {
     try {
-      const response = await instance.post<IResponse>(
-        "http://localhost:5000/auth/login",
-        formData
-      );
+      const response = await instance.post<IResponse>("auth/login", formData);
       return response.data;
     } catch (e: any) {
       return thunkAPI.rejectWithValue(e.response.data.message);

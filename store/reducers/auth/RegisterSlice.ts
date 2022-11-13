@@ -26,7 +26,7 @@ export const fetchRegister = createAsyncThunk(
   async (formData: IFormData, thunkAPI) => {
     try {
       const response = await instance.post<IResponse>(
-        "http://localhost:5000/auth/registration",
+        "auth/registration",
         formData
       );
       return response.data;
