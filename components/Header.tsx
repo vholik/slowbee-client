@@ -185,4 +185,22 @@ const StyledHeader = styled.div`
       }
     }
   }
+  @media only screen and (max-width: 1400px) {
+    .container {
+      margin-right: 5%;
+    }
+  }
+  @media only screen and (max-width: 600px) {
+    .header-inner {
+      gap: 25px;
+      .search-input {
+        width: 100%;
+      }
+      .account-button {
+        img {
+          display: none !important;
+        }
+      }
+    }
+  }
 `;

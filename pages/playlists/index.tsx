@@ -81,6 +81,7 @@ const Playlists = () => {
 };
 
 const StyledPlaylist = styled.div`
+  padding-bottom: 150px;
   .no-playlist {
     position: absolute;
     top: 0;
@@ -117,6 +118,12 @@ const StyledPlaylist = styled.div`
     margin-top: 25px;
     .playlist-inner {
       width: fit-content;
+    }
+  }
+  @media only screen and (max-width: 900px) {
+    .playlists-wrapper {
+      grid-column-gap: 15px;
+      grid-row-gap: 15px;
     }
   }
 `;

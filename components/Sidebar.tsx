@@ -39,7 +39,7 @@ const Sidebar = () => {
       <div className="nav-wrapper">
         <Link href="/">
           <div className={pathname === "/" ? "nav-item active" : "nav-item"}>
-            <Image src={homeIcon} alt="Home" />
+            <Image src={homeIcon} alt="Home" height={25} width={25} />
             <p className="nav-item__name">Home</p>
           </div>
         </Link>
@@ -49,7 +49,7 @@ const Sidebar = () => {
               pathname === "/favorites" ? "nav-item active" : "nav-item"
             }
           >
-            <Image src={favoritesIcon} alt="Favorites" />
+            <Image src={favoritesIcon} alt="Favorites" height={25} width={25} />
             <p className="nav-item__name">Favorites</p>
           </div>
         </Link>
@@ -57,7 +57,7 @@ const Sidebar = () => {
           <div
             className={pathname === "/tracks" ? "nav-item active" : "nav-item"}
           >
-            <Image src={tracksIcon} alt="Tracks" />
+            <Image src={tracksIcon} alt="Tracks" height={25} width={25} />
             <p className="nav-item__name">Tracks</p>
           </div>
         </Link>
@@ -67,7 +67,7 @@ const Sidebar = () => {
               pathname === "/playlists" ? "nav-item active" : "nav-item"
             }
           >
-            <Image src={playlistsIcon} alt="Playlists" />
+            <Image src={playlistsIcon} alt="Playlists" height={25} width={25} />
             <p className="nav-item__name">Playlists</p>
           </div>
         </Link>
@@ -92,8 +92,6 @@ const StyledNavbar = styled.div`
   position: fixed;
   display: flex;
   flex-direction: column;
-  .active {
-  }
   .br {
     border-top: 1px solid var(--grey-10);
     margin-top: 15px;
@@ -128,6 +126,49 @@ const StyledNavbar = styled.div`
     color: var(--grey-60);
     cursor: pointer;
     margin-top: 10px;
+  }
+  @media only screen and (max-width: 1100px) {
+    .top {
+      width: 100%;
+      .br {
+        width: 100%;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 850px) {
+    height: fit-content;
+    flex-direction: row;
+    bottom: 0;
+    width: 100%;
+    z-index: 5;
+    .top {
+      display: none;
+    }
+    .about-link {
+      display: none;
+    }
+    .upload-button {
+      display: none;
+    }
+    .nav-wrapper {
+      margin: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      .nav-item {
+        display: block;
+        text-align: center;
+        margin: 0;
+      }
+    }
+  }
+  @media only screen and (max-width: 400px) {
+    .nav-item {
+      &__name {
+        display: none;
+      }
+    }
   }
 `;
 

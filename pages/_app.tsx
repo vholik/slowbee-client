@@ -8,6 +8,7 @@ import AddToPlaylist from "../components/AddToPlaylist";
 import Header from "../components/Header";
 import TrackDetails from "../components/TrackDetails";
 import Status from "../components/Status";
+import "../public/font/stylesheet.css";
 
 const store = setupStore();
 

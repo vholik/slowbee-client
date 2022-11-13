@@ -126,6 +126,25 @@ export const StyledTracks = styled.div`
     margin-top: 20px;
     border-top: 1px solid var(--grey-10);
   }
+  @media only screen and (max-width: 900px) {
+    margin-top: 0px;
+    .container {
+      margin-top: 50px !important;
+    }
+    .title-wrapper {
+      gap: 25px;
+    }
+  }
+  @media only screen and (max-width: 700px) {
+    .markups {
+      grid-template-columns: 1fr 7fr 2fr 1fr;
+    }
+  }
+  @media only screen and (max-width: 400px) {
+    .markups {
+      grid-template-columns: 1.5fr 7fr 3fr 1fr;
+    }
+  }
 `;
 
 export default Tracks;

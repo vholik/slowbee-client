@@ -137,12 +137,26 @@ const Track: React.FC<TrackProps> = ({ id, position }) => {
           alt="Cover art"
           className="cover-art"
         />
-        <p className="track-name" onClick={openTrackDetails}>
-          {name}
-        </p>
+        {name.length > 15 ? (
+          <p className="track-name" onClick={openTrackDetails}>
+            {name.slice(0, 15)}...
+          </p>
+        ) : (
+          <p className="track-name" onClick={openTrackDetails}>
+            {name}
+          </p>
+        )}
       </div>
-      <p>{artist}</p>
-      <p>{sToTime(length)}</p>
+      {artist.length > 10 ? (
+        <p className="track-name" onClick={openTrackDetails}>
+          {artist.slice(0, 10)}...
+        </p>
+      ) : (
+        <p className="track-name" onClick={openTrackDetails}>
+          {artist}
+        </p>
+      )}
+      <p className="track-detail">{sToTime(length)}</p>
     </StyledTrack>
   );
 };
@@ -180,6 +194,30 @@ const StyledTrack = styled.div`
     .track-name {
       cursor: pointer;
     }
+  }
+  @media only screen and (max-width: 700px) {
+    grid-template-columns: 1fr 7fr 2fr 1fr;
+    .track-detail {
+      font-size: 14px;
+    }
+    .track-body {
+      width: 100%;
+      .track-name {
+        font-size: 16px;
+      }
+
+      img,
+      span {
+        min-height: 40px !important;
+        min-width: 40px !important;
+      }
+    }
+  }
+  @media only screen and (max-width: 400px) {
+    .track-name {
+      margin-right: 20px;
+    }
+    grid-template-columns: 1.5fr 7fr 3fr 1fr;
   }
 `;
 

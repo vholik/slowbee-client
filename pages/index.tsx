@@ -97,7 +97,7 @@ const StyledHome = styled.div`
       #324db1 52.08%
     );
     border-radius: 35px;
-    width: 700px;
+    max-width: 700px;
     filter: drop-shadow(11px 12px 53px rgba(49, 75, 174, 0.3));
     .title {
       width: 70%;
@@ -143,6 +143,46 @@ const StyledHome = styled.div`
     &__link {
       cursor: pointer;
       text-decoration: underline;
+    }
+  }
+  @media only screen and (max-width: 1000px) {
+    .popular-playlist {
+      .title {
+        width: 100%;
+      }
+    }
+  }
+  @media only screen and (max-width: 900px) {
+    .popular-playlist {
+      .title {
+        font-size: 36px;
+      }
+    }
+    .original-playlists {
+      margin-top: 50px;
+      .playlists-wrapper {
+        gap: 15px;
+      }
+      .title {
+        font-size: 36px;
+      }
+    }
+  }
+  @media only screen and (max-width: 600px) {
+    .original-playlists .playlists-wrapper {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 500px) {
+    .popular-playlist {
+      .title {
+        font-size: 28px;
+      }
+    }
+    .original-playlists .title {
+      font-size: 28px;
     }
   }
 `;

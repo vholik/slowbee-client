@@ -100,6 +100,7 @@ const StyledPlaylist = styled.div`
     border-radius: 5px;
   }
   .playlist-name {
+    height: 30px;
     margin-top: 10px;
     font-weight: 500px;
     font-size: 20px;
@@ -111,5 +112,21 @@ const StyledPlaylist = styled.div`
     margin-top: 5px;
     font-size: 18px;
     color: var(--grey-60);
+  }
+  @media only screen and (max-width: 1050px) {
+    .playlist-name {
+      font-size: 16px;
+    }
+    .playlist-length {
+      font-size: 14px;
+    }
+  }
+  @media only screen and (max-width: 950px) {
+    .playlist-length {
+      font-size: 12px;
+    }
+    .playlist-name {
+      font-size: 14px;
+    }
   }
 `;
