@@ -4,6 +4,8 @@ import { useAppDispatch } from "../store/hooks/redux";
 import { fetchRegister } from "../store/reducers/auth/RegisterSlice";
 import styled from "styled-components";
 import Router from "next/router";
+import Link from "next/link";
+import { stateHandler } from "../store/reducers/state/StatusSlice";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -26,10 +28,10 @@ const Login = () => {
     dispatch(fetchRegister(formData))
       .unwrap()
       .then(() => {
-        alert("Registered succesfully");
+        stateHandler({ message: "Succesfully registered" }, dispatch);
         Router.push("/login");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => stateHandler({ isError: true, message: err }, dispatch));
   };
   return (
     <div className="container">
@@ -58,7 +60,7 @@ const Login = () => {
           name="password"
           type="text"
           placeholder="Password"
-          className="input"
+          className="input password--input"
           onChange={(e) =>
             setFormData({
               ...formData,
@@ -66,6 +68,12 @@ const Login = () => {
             })
           }
         />
+        <p className="auth-link">
+          Already have an account?{" "}
+          <Link href="/login">
+            <span className="underlined">Log in</span>
+          </Link>
+        </p>
         <button onClick={submitHandler} className="btn">
           Register
         </button>
@@ -86,6 +94,19 @@ const StyledRegister = styled.div`
     &:hover {
       background-color: #a0a0a0;
     }
+  }
+  .auth-link {
+    font-size: 16px;
+    color: var(--grey-60);
+    margin-bottom: 25px;
+    .underlined {
+      color: white;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  .password--input {
+    margin-bottom: 25px;
   }
 `;
 

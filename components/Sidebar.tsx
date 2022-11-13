@@ -78,11 +78,9 @@ const Sidebar = () => {
           Upload a song
         </button>
       </Link>
-      {isAuth ? (
-        <p className="about-link">User is authorized</p>
-      ) : (
-        <p className="about-link">User isnt authorized</p>
-      )}
+      <Link href={"/about"}>
+        <p className="about-link">About Slowbee</p>
+      </Link>
     </StyledNavbar>
   );
 };

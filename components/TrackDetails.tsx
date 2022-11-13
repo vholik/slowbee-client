@@ -8,6 +8,7 @@ import {
 import { addComment } from "../store/reducers/track/CommentSlice";
 import { ChangeEvent, ChangeEventHandler, EventHandler, useState } from "react";
 import Comment from "./Comment";
+import { stateHandler } from "../store/reducers/state/StatusSlice";
 import { addActiveTrack } from "../store/reducers/player/PlayerSlice";
 
 export default function TrackDetails() {
@@ -47,9 +48,10 @@ export default function TrackDetails() {
         .unwrap()
         .then((id) => {
           dispatch(pushComment(id)), setComment("");
+          stateHandler({ message: "Added comment " }, dispatch);
         });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      stateHandler({ message: error.message, isError: true }, dispatch);
     }
   };
 

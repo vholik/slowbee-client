@@ -10,6 +10,7 @@ import {
   stateHandler,
   triggerMessage,
 } from "../store/reducers/state/StatusSlice";
+import Link from "next/link";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -74,7 +75,7 @@ const Login = () => {
           type="text"
           name="password"
           placeholder="Password"
-          className="input"
+          className="input password--input"
           onChange={(e) =>
             setFormData({
               ...formData,
@@ -82,6 +83,12 @@ const Login = () => {
             })
           }
         />
+        <p className="auth-link">
+          Don't have an account?{" "}
+          <Link href="/register">
+            <span className="underlined">Register</span>
+          </Link>
+        </p>
         <button onClick={submitHandler} className="btn">
           Login
         </button>
@@ -93,6 +100,19 @@ const Login = () => {
 const StyledLogin = styled.div`
   display: flex;
   flex-direction: column;
+  .auth-link {
+    font-size: 16px;
+    color: var(--grey-60);
+    margin-bottom: 25px;
+    .underlined {
+      color: white;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  .password--input {
+    margin-bottom: 25px;
+  }
   .error {
     color: red;
   }

@@ -11,7 +11,6 @@ import volumeMiddleIcon from "../public/images/player/volume-50.svg";
 import { useEffect, useRef } from "react";
 import {
   addActiveTrack,
-  changePosition,
   changeVolume,
   pauseTrack,
   setCurrentTime,
@@ -25,10 +24,10 @@ import { checkFavorite } from "../store/reducers/favorite/CheckIsFavorite";
 import { updateListen } from "../store/reducers/track/UpdateListensSlice";
 import skipLeft from "../public/images/player/skip-left.svg";
 import skipRight from "../public/images/player/skip-right.svg";
-import instance from "../axios";
 import { useRouter } from "next/router";
 import { fetchTrack } from "../store/reducers/player/ControllerSlice";
 import { fetchControlledTrack } from "../store/reducers/favorite/FavoriteControllerSlice";
+import { stateHandler } from "../store/reducers/state/StatusSlice";
 
 export default function Player() {
   const dispatch = useAppDispatch();
@@ -48,13 +47,10 @@ export default function Player() {
     (state) => state.checkIsFavoriteReducer
   );
 
-  // const { favorites } = useAppSelector((state) => state.getFavoritesReducer);
-  // const { playlist } = useAppSelector((state) => state.playlistReducer);
+  const { isLogged } = useAppSelector((state) => state.refreshReducer);
 
   const router = useRouter();
-
   const volumeRef = useRef(null);
-
   const audioPlayer = useRef<HTMLAudioElement>(null);
 
   const volumeHandler = (e: any) => {
@@ -75,7 +71,9 @@ export default function Player() {
     if (pause) {
       audioPlayer.current!.pause();
     } else {
-      audioPlayer.current!.play();
+      audioPlayer.current!.play().catch((e) => {
+        console.log(e);
+      });
     }
   }, [pause]);
 
@@ -116,7 +114,14 @@ export default function Player() {
   const changeCurrentTime = () => {
     dispatch(setCurrentTime(audioPlayer.current!.currentTime));
   };
-  const showModal = () => {
+  const addToPlaylistHandler = () => {
+    if (!isLogged) {
+      stateHandler(
+        { message: "User is not authorized", isError: true },
+        dispatch
+      );
+      return;
+    }
     dispatch(toggleModal());
   };
 
@@ -127,9 +132,13 @@ export default function Player() {
         .then(() => {
           dispatch(checkFavorite(active._id))
             .unwrap()
-            .catch((err) => alert(err.message));
+            .catch((err) =>
+              stateHandler({ message: err, isError: true }, dispatch)
+            );
         })
-        .catch((err) => alert(err.message));
+        .catch((err) =>
+          stateHandler({ message: err.message, isError: true }, dispatch)
+        );
     }
   };
   const removeFavoriteHandler = () => {
@@ -137,18 +146,18 @@ export default function Player() {
       dispatch(updateFavorites(active._id))
         .unwrap()
         .then((res) => {
-          console.log(res);
           dispatch(checkFavorite(active._id))
             .unwrap()
-            .catch((err) => alert(err.message));
+            .catch((err) => console.log(err));
         })
-        .catch((err) => alert(err.message));
+        .catch((err) => console.log(err.message));
     }
   };
 
   const switchHandler = (type: string) => {
     const playlistId = router.query.id as string;
     const isPlaylistDirectory = playlistId && directory === "playlists";
+
     if (active) {
       const query = {
         id: isPlaylistDirectory ? playlistId : active._id,
@@ -157,6 +166,7 @@ export default function Player() {
         filter: sortingType,
         position,
       };
+
       dispatch(fetchTrack(query))
         .unwrap()
         .then((track) => {
@@ -172,6 +182,7 @@ export default function Player() {
         type: type,
         position,
       };
+
       dispatch(fetchControlledTrack(query))
         .unwrap()
         .then((track) => {
@@ -324,7 +335,7 @@ export default function Player() {
             onChange={volumeHandler}
           />
           <p className="range-value">100</p>
-          <div className="bookmark" onClick={showModal}>
+          <div className="bookmark" onClick={addToPlaylistHandler}>
             <Image
               src={bookmarkIcon}
               alt="Add to playlist"
