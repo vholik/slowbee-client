@@ -21,7 +21,7 @@ import filledHeart from "../public/images/player/favorite-filled-icon.svg";
 import unfilledHeart from "../public/images/player/favorite-unfilled-icon.svg";
 import { updateFavorites } from "../store/reducers/favorite/toggleFavorites";
 import { checkFavorite } from "../store/reducers/favorite/CheckIsFavorite";
-import { updateListen } from "../store/reducers/track/UpdateListensSlice";
+import { updateListen } from "../store/reducers/player/UpdateListensSlice";
 import skipLeft from "../public/images/player/skip-left.svg";
 import skipRight from "../public/images/player/skip-right.svg";
 import { useRouter } from "next/router";

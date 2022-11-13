@@ -12,7 +12,7 @@ import getFavoritesReducer from "./favorite/GetFavoritesSlice";
 import addToFavoritesReducer from "./favorite/toggleFavorites";
 import checkIsFavoriteReducer from "./favorite/CheckIsFavorite";
 import searchReducer from "./track/SearchSlice";
-import updateListensReducer from "./track/UpdateListensSlice";
+import updateListensReducer from "./player/UpdateListensSlice";
 import originalsReducer from "./playlist/OriginalsSlice";
 import refreshReducer from "./auth/RefreshSlice";
 import deletePlaylistReducer from "./playlist/DeletePlaylistSlice";
