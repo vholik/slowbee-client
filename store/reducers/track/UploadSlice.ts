@@ -17,6 +17,8 @@ const initialState: TrackState = {
     length: 0,
     cover: "",
     audio: "",
+    comments: [],
+    listens: 0,
   },
   isLoading: false,
   error: "",

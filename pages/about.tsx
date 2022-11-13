@@ -9,9 +9,9 @@ export default function About() {
         <p className="about">
           Hello world! This project has fully done by{" "}
           <a href="https://viktorholik.com" target="_blank">
-            Viktor Holik
+            Viktor Holik.
           </a>
-          . Enjoy!
+          .We do not monitize anything. Enjoy!
         </p>
       </StyledAbout>
     </div>
