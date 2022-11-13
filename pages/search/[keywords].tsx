@@ -17,9 +17,7 @@ const Tracks = () => {
   useEffect(() => {
     dispatch(searchTracks(keywords as string))
       .unwrap()
-      .then((tracks) => {
-        // console.log(tracks);
-      })
+
       .catch((err) => console.log(err));
   }, []);
 
@@ -48,16 +46,8 @@ const Tracks = () => {
           </div>
         ) : (
           <div className="tracks-wrapper">
-            {tracks.map((track) => (
-              <Track
-                key={track._id}
-                name={track.name}
-                artist={track.artist}
-                audio={track.audio}
-                cover={track.cover}
-                length={track.length}
-                id={track._id}
-              />
+            {tracks.map((track, key) => (
+              <Track key={track._id} position={key} id={track._id} />
             ))}
           </div>
         )}

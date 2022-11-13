@@ -31,7 +31,7 @@ export const fetchTracks = createAsyncThunk(
   async (trackData: ITrackData, thunkAPI) => {
     const { page, sortingType = "newest" } = trackData;
     try {
-      const response = await axios.get<string[]>(
+      const response = await instance.get<string[]>(
         `http://localhost:5000/tracks`,
         {
           params: {

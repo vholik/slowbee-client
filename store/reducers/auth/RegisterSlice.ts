@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
+import instance from "../../../axios";
 interface IFormData {
   username: string;
   password: string;
@@ -26,7 +25,7 @@ export const fetchRegister = createAsyncThunk(
   "auth/registration",
   async (formData: IFormData, thunkAPI) => {
     try {
-      const response = await axios.post<IResponse>(
+      const response = await instance.post<IResponse>(
         "http://localhost:5000/auth/registration",
         formData
       );

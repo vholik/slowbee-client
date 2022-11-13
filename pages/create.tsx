@@ -13,9 +13,7 @@ import { stateHandler } from "../store/reducers/state/StatusSlice";
 
 const Create = () => {
   const dispatch = useAppDispatch();
-  const { track, error, isLoading } = useAppSelector(
-    (state) => state.uploadReducer
-  );
+  const { isLogged } = useAppSelector((state) => state.refreshReducer);
   const [isError, setIsError] = useState<any>("");
   const [isPercentageShow, SetIsPercentageShow] = useState(false);
   const audioRef = useRef(null);
@@ -34,6 +32,7 @@ const Create = () => {
     length: 0,
   });
   const [isOpen, setIsOpen] = useState(true);
+
   const uploadHandler = () => {
     setIsError("");
     try {
@@ -81,7 +80,7 @@ const Create = () => {
           stateHandler({ message: err, isError: true }, dispatch)
         );
     } catch (error: any) {
-      setIsError(error);
+      stateHandler({ message: error.message, isError: true }, dispatch);
     }
   };
 
@@ -136,12 +135,9 @@ const Create = () => {
         }
       }
     } catch (error: any) {
-      alert(error);
-      setIsError(error.message);
+      stateHandler({ message: error.message, isError: true }, dispatch);
     }
   };
-
-  const { isLogged } = useAppSelector((state) => state.refreshReducer);
 
   if (!isLogged) {
     return <AuthFirst />;

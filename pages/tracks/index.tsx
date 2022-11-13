@@ -4,19 +4,15 @@ import { useAppSelector } from "../../store/hooks/redux";
 import { useAppDispatch } from "../../store/hooks/redux";
 import Track from "../../components/Track";
 import styled from "styled-components";
-import { LoadingTrack } from "../../components/Track";
 import { changePage } from "../../store/reducers/track/TracksSlice";
 import { changeIsAll } from "../../store/reducers/track/TracksSlice";
-import { changePosition } from "../../store/reducers/player/PlayerSlice";
 import { changeSortingType } from "../../store/reducers/track/TracksSlice";
 
 const Tracks = () => {
   const dispatch = useAppDispatch();
-  const { tracks, error, isLoading, isAll, sortingType } = useAppSelector(
+  const { tracks, isAll, sortingType } = useAppSelector(
     (state) => state.trackReducer
   );
-
-  const { position } = useAppSelector((state) => state.playerReducer);
 
   const [page, setPage] = useState(0);
 
@@ -93,15 +89,6 @@ const Tracks = () => {
     </StyledTracks>
   );
 };
-
-async function getServerSideProps() {
-  // Fetch data from external API
-  const res = await fetch(`https://.../data`);
-  const data = await res.json();
-
-  // Pass data to the page via props
-  return { props: { data } };
-}
 
 export const StyledTracks = styled.div`
   padding-bottom: 200px;

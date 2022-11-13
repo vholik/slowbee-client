@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { ITrack } from "../../../types/track";
 import axios from "axios";
+import instance from "../../../axios";
 
 interface TrackState {
   track: ITrack;
@@ -17,6 +18,8 @@ const initialState: TrackState = {
     length: 0,
     cover: "",
     audio: "",
+    comments: [],
+    listens: 0,
   },
   isLoading: false,
   error: "",
@@ -27,7 +30,7 @@ export const updateListen = createAsyncThunk(
   "updateListen",
   async (id: string, thunkAPI) => {
     try {
-      const response = await axios.put<ITrack>(
+      const response = await instance.put<ITrack>(
         `http://localhost:5000/tracks/${id}`
       );
       return response.data;
