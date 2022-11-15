@@ -127,6 +127,9 @@ const StyledNavbar = styled.div`
     cursor: pointer;
     margin-top: 10px;
   }
+  @media only screen and (max-width: 1400px) {
+    height: calc(100vh - 110px);
+  }
   @media only screen and (max-width: 1100px) {
     .top {
       width: 100%;

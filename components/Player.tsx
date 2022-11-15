@@ -223,14 +223,15 @@ export default function Player() {
         ></audio>
         <div className="general-info">
           {active?.cover && (
-            <Image
-              alt="Cover"
-              src={active?.cover}
-              className="cover"
-              height={50}
-              width={50}
-              objectFit="cover"
-            />
+            <div className="cover">
+              <Image
+                alt="Cover"
+                src={active?.cover}
+                height={50}
+                width={50}
+                objectFit="cover"
+              />
+            </div>
           )}
           <div className="name-wrapper">
             {active && active?.name.length > 10 ? (
@@ -361,8 +362,13 @@ const StyledPlayer = styled.div`
   justify-content: space-between;
   align-items: center;
   z-index: 5;
+  height: 110px;
   .favorite {
     margin-left: 15px;
+    img {
+      min-height: 25px;
+      min-width: 25px;
+    }
   }
   .bookmark {
     margin-left: 10px;
@@ -371,7 +377,7 @@ const StyledPlayer = styled.div`
   .general-info {
     display: flex;
     align-items: center;
-    .cover {
+    .cover img {
       border-radius: 8px;
     }
 
@@ -429,6 +435,10 @@ const StyledPlayer = styled.div`
     display: flex;
     align-items: center;
     gap: 15px;
+    img {
+      min-height: 25px;
+      min-width: 25px;
+    }
     .range-value {
       width: 20px;
     }
@@ -442,6 +452,69 @@ const StyledPlayer = styled.div`
     }
     100% {
       transform: translateX(100%);
+    }
+  }
+  @media only screen and (max-width: 1770px) {
+    .volume {
+      .range-value {
+        display: none;
+      }
+    }
+    .track-controller .timeline input {
+      width: 200px;
+    }
+  }
+  @media only screen and (max-width: 1550px) {
+    .general-info .name-wrapper {
+      width: 130px;
+    }
+  }
+  @media only screen and (max-width: 1400px) {
+    left: 0;
+  }
+  @media only screen and (max-width: 1200px) {
+    .track-controller {
+      display: flex;
+      flex-direction: column;
+      .track-handlers {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  }
+  @media only screen and (max-width: 1000px) {
+    .general-info {
+      .name-wrapper {
+        display: none;
+      }
+      .cover {
+        display: none !important;
+      }
+      .favorite {
+        margin-left: 0;
+      }
+    }
+  }
+  @media only screen and (max-width: 850px) {
+    bottom: 120px;
+    display: flex;
+    justify-content: center;
+    .volume {
+      display: none;
+    }
+    .favorite {
+      position: absolute;
+      right: 50px;
+      top: 25px;
+    }
+  }
+  @media only screen and (max-width: 400px) {
+    bottom: 99px;
+    .favorite {
+      right: 25px;
+    }
+    .range-value {
+      display: none;
     }
   }
 `;
