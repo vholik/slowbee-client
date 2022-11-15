@@ -106,7 +106,7 @@ const StyledHeader = styled.div`
   .container {
     padding-top: 25px;
     max-width: none;
-    margin-right: 100px;
+    margin-right: 90px;
   }
   .header-inner {
     display: flex;

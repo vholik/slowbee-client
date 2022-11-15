@@ -181,6 +181,7 @@ const StyledHome = styled.div`
 
   @media only screen and (max-width: 500px) {
     .popular-playlist {
+      padding: 35px 20px;
       .title {
         font-size: 28px;
       }
