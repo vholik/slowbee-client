@@ -85,6 +85,8 @@ const Login = () => {
 const StyledRegister = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 150px;
+
   .title {
     margin-bottom: 35px;
   }

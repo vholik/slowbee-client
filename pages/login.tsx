@@ -100,6 +100,7 @@ const Login = () => {
 const StyledLogin = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 150px;
   .auth-link {
     font-size: 16px;
     color: var(--grey-60);
