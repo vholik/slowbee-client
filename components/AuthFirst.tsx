@@ -20,7 +20,7 @@ export default function AuthFirst() {
 
 const StyledAuthFirst = styled.div`
   .container {
-    height: 250px;
+    height: 150px;
   }
   .error {
     position: absolute;
