@@ -22,7 +22,9 @@ const Playlists = () => {
   }
 
   useEffect(() => {
-    dispatch(fetchPlaylists());
+    if (isLogged) {
+      dispatch(fetchPlaylists());
+    }
   }, []);
 
   return (

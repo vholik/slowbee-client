@@ -30,7 +30,7 @@ const Login = () => {
           Router.push("/login");
           stateHandler({ message: "Succesfully registered" }, dispatch);
         })
-        .catch((err) =>
+        .catch((err: string) =>
           stateHandler({ isError: true, message: err }, dispatch)
         );
     } catch (error: any) {

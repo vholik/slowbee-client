@@ -28,7 +28,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     dispatch(fetchOriginals())
       .unwrap()
-      .then((playlists) => {})
       .catch((err) => console.log(err));
   }, []);
 
