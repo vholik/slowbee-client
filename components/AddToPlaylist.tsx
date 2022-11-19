@@ -47,6 +47,9 @@ export default function AddToPlaylist() {
     >
       <div className="box" onClick={(e) => e.stopPropagation()}>
         <h1 className="title">Add to your playlists</h1>
+        {playlists.length === 0 && (
+          <p className="no-playlists">You have not created any playlist</p>
+        )}
         <div className="playlists-wrapper">
           {playlists.map((id) => (
             <div
@@ -75,6 +78,11 @@ const StyledAddToPlaylist = styled.div`
   align-items: center;
   backdrop-filter: blur(2.5px);
   z-index: 10;
+  .no-playlists {
+    font-size: 20px;
+    margin-top: 35px;
+    color: var(--grey-60);
+  }
   .title {
     font-size: 35px;
     margin: 0;
