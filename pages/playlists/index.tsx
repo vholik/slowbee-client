@@ -17,15 +17,15 @@ const Playlists = () => {
   );
   const { isLogged } = useAppSelector((state) => state.refreshReducer);
 
-  if (!isLogged) {
-    return <AuthFirst />;
-  }
-
   useEffect(() => {
     if (isLogged) {
       dispatch(fetchPlaylists());
     }
   }, []);
+
+  if (!isLogged) {
+    return <AuthFirst />;
+  }
 
   return (
     <StyledPlaylist>

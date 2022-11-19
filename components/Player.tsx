@@ -82,7 +82,7 @@ export default function Player() {
       // Check favorite
       dispatch(checkFavorite(active._id))
         .unwrap()
-        .catch((err) => console.log(err));
+        .catch((err: any) => console.log(err));
     }
   }, [isAlreadyFavorite, active]);
 
@@ -126,10 +126,10 @@ export default function Player() {
   };
 
   const addFavoriteHandler = () => {
-    if (active) {
+    if (active && !isLoading) {
       dispatch(updateFavorites(active._id))
         .unwrap()
-        .then(() => {
+        .then((msg) => {
           dispatch(checkFavorite(active._id))
             .unwrap()
             .catch((err) =>

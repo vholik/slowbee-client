@@ -46,7 +46,7 @@ const StyledStatus = styled.div`
     position: fixed;
     right: 25px;
     bottom: 25px;
-    backdrop-filter: blur(2.5px);
+    backdrop-filter: blur(5px);
     .error-text {
       width: 150px;
     }

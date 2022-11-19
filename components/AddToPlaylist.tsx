@@ -15,10 +15,11 @@ export default function AddToPlaylist() {
   const { playlists, error, isLoading } = useAppSelector(
     (state) => state.playlistsReducer
   );
-  const { isLogged } = useAppSelector((state) => state.refreshReducer);
+
   const { active } = useAppSelector((state) => state.playerReducer);
+
   useEffect(() => {
-      dispatch(fetchPlaylists());
+    dispatch(fetchPlaylists());
   }, []);
 
   const addPlaylistHandler = (playlistId: string) => {

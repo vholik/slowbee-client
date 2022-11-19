@@ -14,10 +14,6 @@ export default function Favorites() {
 
   const { isLogged } = useAppSelector((state) => state.refreshReducer);
 
-  if (!isLogged) {
-    return <AuthFirst />;
-  }
-
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -46,6 +42,10 @@ export default function Favorites() {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
   }, []);
+
+  if (!isLogged) {
+    return <AuthFirst />;
+  }
 
   return (
     <StyledFavorites>
