@@ -6,8 +6,8 @@ const nextConfig = {
 
 module.exports = {
   env: {
-    // server: "https://slowbee-server.onrender.com",
-    server: "http://localhost:5000",
+    server: "https://slowbee-server.onrender.com",
+    // server: "http://localhost:5000",
   },
   images: {
     domains: ["firebasestorage.googleapis.com"],
