@@ -6,7 +6,6 @@ interface IFormData {
 }
 
 interface RegisterState {
-  message: string;
   isLoading: boolean;
   error: string;
 }
@@ -16,7 +15,6 @@ interface IResponse {
 }
 
 const initialState: RegisterState = {
-  message: "",
   isLoading: false,
   error: "",
 };
@@ -47,7 +45,6 @@ export const RegisterSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.error = "";
-      state.message = action.payload.message;
     },
     [fetchRegister.pending.type]: (state) => {
       state.isLoading = true;

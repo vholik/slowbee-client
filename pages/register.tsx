@@ -10,28 +10,32 @@ import { stateHandler } from "../store/reducers/state/StatusSlice";
 const Login = () => {
   const dispatch = useAppDispatch();
 
-  const { message, error, isLoading } = useAppSelector(
-    (state) => state.registerReducer
-  );
+  const { error, isLoading } = useAppSelector((state) => state.registerReducer);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
   const submitHandler = () => {
-    if (formData.password.length < 4 || formData.password.length > 10) {
-      alert("Password can't be min 4 max 10");
+    try {
+      if (formData.password.length < 4 || formData.password.length > 10) {
+        throw new Error("Password can't be min 4 max 10");
+      }
+      if (formData.username.length < 4 || formData.username.length > 10) {
+        throw new Error("Password can't be min 4 max 10");
+      }
+      dispatch(fetchRegister(formData))
+        .unwrap()
+        .then(() => {
+          Router.push("/login");
+          stateHandler({ message: "Succesfully registered" }, dispatch);
+        })
+        .catch((err) =>
+          stateHandler({ isError: true, message: err }, dispatch)
+        );
+    } catch (error: any) {
+      stateHandler({ isError: true, message: error.message }, dispatch);
     }
-    if (formData.username.length < 4 || formData.username.length > 10) {
-      alert("Password can't be min 4 max 10");
-    }
-    dispatch(fetchRegister(formData))
-      .unwrap()
-      .then(() => {
-        stateHandler({ message: "Succesfully registered" }, dispatch);
-        Router.push("/login");
-      })
-      .catch((err) => stateHandler({ isError: true, message: err }, dispatch));
   };
   return (
     <div className="container">
