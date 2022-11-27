@@ -24,13 +24,16 @@ const Tracks = () => {
   };
 
   const fetchTracksHandler = () => {
-    if (!isAll) {
-      dispatch(changePage(page));
+    try {
+      if (!isAll) {
+        dispatch(changePage(page));
 
-      dispatch(fetchTracks({ page, sortingType }))
-        .unwrap()
-        .then(() => {})
-        .catch((err) => console.log(err));
+        dispatch(fetchTracks({ page, sortingType }))
+          .unwrap()
+          .catch((err) => console.log(err));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
