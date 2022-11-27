@@ -507,6 +507,16 @@ const StyledPlayer = styled.div`
       right: 50px;
       top: 25px;
     }
+    .track-controller {
+      width: 100%;
+
+      .timeline {
+        width: 100%;
+        input {
+          width: 100%;
+        }
+      }
+    }
   }
   @media only screen and (max-width: 400px) {
     bottom: 99px;

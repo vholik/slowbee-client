@@ -128,7 +128,7 @@ const StyledNavbar = styled.div`
     margin-top: 10px;
   }
   @media only screen and (max-width: 1400px) {
-    padding-bottom: 110px;
+    padding-bottom: 135px;
   }
   @media only screen and (max-width: 1100px) {
     .top {
@@ -145,6 +145,8 @@ const StyledNavbar = styled.div`
     bottom: 0;
     width: 100%;
     z-index: 5;
+    padding-bottom: 35px;
+
     .top {
       display: none;
     }
