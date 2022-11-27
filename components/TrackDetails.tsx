@@ -49,7 +49,8 @@ export default function TrackDetails() {
         .then((id) => {
           dispatch(pushComment(id)), setComment("");
           stateHandler({ message: "Added comment " }, dispatch);
-        });
+        })
+        .catch((err) => console.log(err));
     } catch (error: any) {
       stateHandler({ message: error.message, isError: true }, dispatch);
     }

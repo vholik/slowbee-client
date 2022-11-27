@@ -20,10 +20,13 @@ export default function Playlist({ id }: PlaylistProps) {
   });
 
   useEffect(() => {
-    instance.get(`/playlists/${id}`).then(({ data }) => {
-      setPlaylist(data);
-      setIsLoading(false);
-    });
+    instance
+      .get(`/playlists/${id}`)
+      .then(({ data }) => {
+        setPlaylist(data);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (

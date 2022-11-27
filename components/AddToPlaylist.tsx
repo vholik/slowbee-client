@@ -19,7 +19,9 @@ export default function AddToPlaylist() {
   const { active } = useAppSelector((state) => state.playerReducer);
 
   useEffect(() => {
-    dispatch(fetchPlaylists());
+    dispatch(fetchPlaylists())
+      .unwrap()
+      .catch((err) => console.log(err));
   }, []);
 
   const addPlaylistHandler = (playlistId: string) => {

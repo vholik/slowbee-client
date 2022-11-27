@@ -46,10 +46,13 @@ const Track: React.FC<TrackProps> = ({ id, position }) => {
   const { _id, artist, audio, cover, length, name, comments, listens } = track;
 
   useEffect(() => {
-    instance.get(`/tracks/${id}`).then(({ data }) => {
-      setTrack(data);
-      setIsLoading(false);
-    });
+    instance
+      .get(`/tracks/${id}`)
+      .then(({ data }) => {
+        setTrack(data);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const addActiveSong = () => {

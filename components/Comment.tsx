@@ -22,10 +22,13 @@ export default function Comment({ comment }: ICommentProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    instance.get<IComment>(`/tracks/comments/${comment}`).then(({ data }) => {
-      setFetchedComment(data);
-      setIsLoading(false);
-    });
+    instance
+      .get<IComment>(`/tracks/comments/${comment}`)
+      .then(({ data }) => {
+        setFetchedComment(data);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
