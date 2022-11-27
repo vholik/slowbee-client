@@ -17,11 +17,15 @@ export default function Favorites() {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    if (!isAll) {
-      dispatch(fetchFavorites(page))
-        .unwrap()
-        .then((favorites) => {})
-        .catch((err) => console.log(err));
+    try {
+      if (!isAll) {
+        dispatch(fetchFavorites(page))
+          .unwrap()
+          .then((favorites) => {})
+          .catch((err) => console.log(err));
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, [page, isAll]);
 
