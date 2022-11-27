@@ -50,6 +50,11 @@ const Create = () => {
           "The length of the name field can not be bigger that 35 symbols"
         );
       }
+      if (formData.artist.length > 35 || formData.artist.length > 35) {
+        throw new Error(
+          "The length of the artist field can not be bigger that 35 symbols"
+        );
+      }
       const audioFormat =
         fileNames.audio.split(".")[fileNames.audio.split(".").length - 1];
       const coverFormat =
