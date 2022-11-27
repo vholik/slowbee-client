@@ -127,6 +127,9 @@ const StyledLogin = styled.div`
       background-color: #a0a0a0;
     }
   }
+  @media only screen and (max-width: 850px) {
+    padding-bottom: 350px;
+  }
 `;
 
 export default Login;

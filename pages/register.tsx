@@ -114,6 +114,9 @@ const StyledRegister = styled.div`
   .password--input {
     margin-bottom: 25px;
   }
+  @media only screen and (max-width: 850px) {
+    padding-bottom: 350px;
+  }
 `;
 
 export default Login;

@@ -137,6 +137,7 @@ export const StyledTracks = styled.div`
     .title-wrapper {
       gap: 25px;
     }
+    padding-bottom: 250px;
   }
   @media only screen and (max-width: 700px) {
     .markups {
