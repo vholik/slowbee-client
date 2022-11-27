@@ -45,9 +45,9 @@ const Create = () => {
       if (formData.artist.length < 4) {
         throw new Error("Please fill artist name of the track");
       }
-      if (formData.name.length > 25 || formData.artist.length > 25) {
+      if (formData.name.length > 35 || formData.artist.length > 35) {
         throw new Error(
-          "The length of the input can not be bigger that 15 symbols"
+          "The length of the name field can not be bigger that 35 symbols"
         );
       }
       const audioFormat =
