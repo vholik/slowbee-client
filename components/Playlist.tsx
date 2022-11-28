@@ -31,16 +31,6 @@ export default function Playlist({ id }: PlaylistProps) {
 
   return (
     <StyledPlaylist>
-      {/* {playlist?.cover && !isLoading ? (
-        <Image
-          src={playlist.cover}
-          height={200}
-          width={200}
-          objectFit="cover"
-        />
-      ) : (
-        <div className="cover gradient"></div>
-      )} */}
       {isLoading && <div className="cover gradient"></div>}
       {!isLoading && !playlist.cover && (
         <Image
