@@ -6,7 +6,7 @@ const nextConfig = {
 
 module.exports = {
   env: {
-    server: "https://slowbee-server.onrender.com",
+    server: "https://wild-red-kitten-wrap.cyclic.app",
     // server: "http://localhost:5000",
   },
   images: {
